@@ -1,11 +1,10 @@
-# -*- coding: utf-8 -*-
 """
 Application Factory Module
 
 Description:
-    - This module defines the Flask application factory and the basic
-    configuration of the application.
-    - The application factory is a function that returns a Flask application
+    - This module defines Flask application factory and basic configuration of
+    application.
+    - Application factory is a function that returns a Flask application
     instance.
 
 """
@@ -25,13 +24,13 @@ from .database.base import db
 
 def create_app() -> Flask:
     """
-    Create a Flask application instance with the SQLAlchemy database instance
+    Create a Flask application instance with SQLAlchemy database instance
     and CORS enabled.
 
     Description:
         - Create a Flask application instance.
-        - Configure the application with the SQLAlchemy database instance.
-        - Enable CORS for the application.
+        - Configure application with SQLAlchemy database instance.
+        - Enable CORS for application.
 
     Args:
         - `None`
@@ -42,13 +41,13 @@ def create_app() -> Flask:
     """
     app = Flask(__name__)
 
-    # Configure the application with the database URL
+    # Configure application with database URL
     app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
 
-    # Disable the SQLAlchemy track modifications
+    # Disable SQLAlchemy track modifications
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-    # Initialize the app with the SQLAlchemy database
+    # Initialize app with SQLAlchemy database
     db.init_app(app)
 
     # Enable CORS

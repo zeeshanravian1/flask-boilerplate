@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Role Service
 
@@ -26,7 +25,7 @@ class RoleService(BaseService):
         Role Service Constructor
 
         Description:
-            - Initializes the Role Service object
+            - Initializes Role Service object
 
         """
 

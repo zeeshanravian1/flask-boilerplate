@@ -1728,13 +1728,13 @@ files = [
 
 [[package]]
 name = "packaging"
-version = "22.0"
+version = "23.2"
 description = "Core utilities for Python packages"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "packaging-22.0-py3-none-any.whl", hash = "sha256:957e2148ba0e1a3b282772e791ef1d8083648bc131c8ab0c1feba110ce1146c3"},
-    {file = "packaging-22.0.tar.gz", hash = "sha256:2198ec20bd4c017b8f9717e00f0c8714076fc2fd93816750ab48e2c41de2cfd3"},
+    {file = "packaging-23.2-py3-none-any.whl", hash = "sha256:8c491190033a9af7e1d931d0b5dacc2ef47509b34dd0de67ed209b5203fc88c7"},
+    {file = "packaging-23.2.tar.gz", hash = "sha256:048fb0e9405036518eaaf48a55953c750c11e1a1b68e0dd1a9d62ed0c092cfc5"},
 ]
 
 [[package]]
@@ -2207,24 +2207,38 @@ yapf = ["whatthepatch (>=1.0.2,<2.0.0)", "yapf (>=0.33.0)"]
 
 [[package]]
 name = "pytoolconfig"
-version = "1.3.0"
+version = "1.3.1"
 description = "Python tool configuration"
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 files = [
-    {file = "pytoolconfig-1.3.0-py3-none-any.whl", hash = "sha256:3e9612367f081634b30087c1594125523798fa263514982795493d6897be996c"},
-    {file = "pytoolconfig-1.3.0.tar.gz", hash = "sha256:9201586c8f5c00fa2bb37d644f908f5fb9eadabc6be570ccf27f4e19a201a071"},
+    {file = "pytoolconfig-1.3.1-py3-none-any.whl", hash = "sha256:5d8cea8ae1996938ec3eaf44567bbc5ef1bc900742190c439a44a704d6e1b62b"},
+    {file = "pytoolconfig-1.3.1.tar.gz", hash = "sha256:51e6bd1a6f108238ae6aab6a65e5eed5e75d456be1c2bf29b04e5c1e7d7adbae"},
 ]
 
 [package.dependencies]
-packaging = ">=22.0"
-platformdirs = {version = ">=1.4.4", optional = true, markers = "extra == \"global\""}
+packaging = ">=23.2"
+platformdirs = {version = ">=3.11.0", optional = true, markers = "extra == \"global\""}
 
 [package.extras]
-doc = ["sphinx (>=4.5.0)", "tabulate (>=0.8.9)"]
-gendocs = ["pytoolconfig[doc]", "sphinx (>=4.5.0)", "sphinx-autodoc-typehints (>=1.18.1)", "sphinx-rtd-theme (>=1.0.0)"]
-global = ["platformdirs (>=1.4.4)"]
-validation = ["pydantic (>=1.7.4)"]
+doc = ["sphinx (>=7.1.2)", "tabulate (>=0.9.0)"]
+gendocs = ["pytoolconfig[doc]", "sphinx (>=7.1.2)", "sphinx-autodoc-typehints (>=1.25.2)", "sphinx-rtd-theme (>=2.0.0)"]
+global = ["platformdirs (>=3.11.0)"]
+validation = ["pydantic (>=2.5.3)"]
+
+[[package]]
+name = "pyupgrade"
+version = "3.15.2"
+description = "A tool to automatically upgrade syntax for newer versions."
+optional = false
+python-versions = ">=3.8.1"
+files = [
+    {file = "pyupgrade-3.15.2-py2.py3-none-any.whl", hash = "sha256:ce309e0ff8ecb73f56a45f12570be84bbbde9540d13697cacb261a7f595fb1f5"},
+    {file = "pyupgrade-3.15.2.tar.gz", hash = "sha256:c488d6896c546d25845712ef6402657123008d56c1063174e27aabe15bd6b4e5"},
+]
+
+[package.dependencies]
+tokenize-rt = ">=5.2.0"
 
 [[package]]
 name = "pywin32"
@@ -2743,18 +2757,18 @@ files = [
 
 [[package]]
 name = "skjold"
-version = "0.6.1"
+version = "0.6.2"
 description = "Security audit Python project dependencies against security advisory databases."
 optional = false
-python-versions = ">=3.7,<4.0"
+python-versions = "<4.0,>=3.7"
 files = [
-    {file = "skjold-0.6.1-py3-none-any.whl", hash = "sha256:0229f4d6cc6a4597311e1e1065f650b5b963055c21ce21aa21a5bfa159aba02e"},
-    {file = "skjold-0.6.1.tar.gz", hash = "sha256:80123bd6f17a97746f1df1089f321e90b82e6a6faeab63ce81f7a4b1517206c3"},
+    {file = "skjold-0.6.2-py3-none-any.whl", hash = "sha256:5b25bc44fb69e42e36e871b755039b83fef19f88cc2b434b382c613cd097cec0"},
+    {file = "skjold-0.6.2.tar.gz", hash = "sha256:8f120e6f70e953776afc0c789e6b0cddc7afaaf8e905ebd5cbc10ad3724b224d"},
 ]
 
 [package.dependencies]
 click = ">=8,<9"
-packaging = ">=21,<23"
+packaging = ">=21,<24"
 pyyaml = ">=6.0,<7.0"
 toml = ">=0.10.0"
 
@@ -2937,6 +2951,17 @@ doc = ["sphinx", "sphinx_rtd_theme"]
 test = ["pytest", "ruff"]
 
 [[package]]
+name = "tokenize-rt"
+version = "5.2.0"
+description = "A wrapper around the stdlib `tokenize` which roundtrips."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "tokenize_rt-5.2.0-py2.py3-none-any.whl", hash = "sha256:b79d41a65cfec71285433511b50271b05da3584a1da144a0752e9c621a285289"},
+    {file = "tokenize_rt-5.2.0.tar.gz", hash = "sha256:9fe80f8a5c1edad2d3ede0f37481cc0cc1538a2f442c9c2f9e4feacd2792d054"},
+]
+
+[[package]]
 name = "toml"
 version = "0.10.2"
 description = "Python Library for Tom's Obvious, Minimal Language"
@@ -2960,13 +2985,13 @@ files = [
 
 [[package]]
 name = "tomlkit"
-version = "0.12.4"
+version = "0.12.5"
 description = "Style preserving TOML library"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "tomlkit-0.12.4-py3-none-any.whl", hash = "sha256:5cd82d48a3dd89dee1f9d64420aa20ae65cfbd00668d6f094d7578a78efbb77b"},
-    {file = "tomlkit-0.12.4.tar.gz", hash = "sha256:7ca1cfc12232806517a8515047ba66a19369e71edf2439d0f5824f91032b6cc3"},
+    {file = "tomlkit-0.12.5-py3-none-any.whl", hash = "sha256:af914f5a9c59ed9d0762c7b64d3b5d5df007448eb9cd2edc8a46b1eafead172f"},
+    {file = "tomlkit-0.12.5.tar.gz", hash = "sha256:eef34fba39834d4d6b73c9ba7f3e4d1c417a4e56f89a7e96e090dd0d24b8fb3c"},
 ]
 
 [[package]]
@@ -3291,4 +3316,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "6dd3b68d506a3aef3af17064bfb15918f680873fa0edb21e9eee24a87ebfc46e"
+content-hash = "21ac9db7624c28ba056b790c2a4035cd22aea94086a58478d99c46b59c0bd209"

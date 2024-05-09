@@ -1,10 +1,9 @@
-# -*- coding: utf-8 -*-
 """
-WSGI entry point for the application.
+WSGI entry point for application.
 
 Description:
-    - This module contains the WSGI entry point for the application.
-    - It initializes the Flask application and creates the database tables.
+    - This module contains WSGI entry point for application.
+    - It initializes Flask application and creates database tables.
 
 """
 
@@ -14,7 +13,7 @@ from flask_boilerplate.apis.role import role_router
 from flask_boilerplate.app import create_app
 from flask_boilerplate.core.config import PROJECT_TITLE
 
-# Create the Flask application object
+# Create Flask application object
 app: Flask = create_app()
 
 

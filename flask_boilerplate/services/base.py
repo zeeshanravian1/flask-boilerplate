@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Base Services
 
@@ -27,7 +26,7 @@ class BaseService:
         Base Service Constructor
 
         Description:
-            - Initializes the Service object
+            - Initializes Service object
 
         Args:
             - `repository (BaseRepository)`: Repository object. **(Required)**

@@ -3,43 +3,91 @@ repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.6.0
     hooks:
-    # Removes unnecessary whitespace at the end of lines, improving code readability and
-    # preventing potential issues in certain editors.
-    - id: trailing-whitespace
-
-    # Ensures files end with a newline, providing consistency across codebases and conforming to
-    # POSIX standards for better interoperability.
-    - id: end-of-file-fixer
-
-    # Validates YAML files' syntax and structure, preventing potential issues caused by improperly
-    # formatted configuration files.
-    - id: check-yaml
-
-    # Prevents committing large files that can slow down repository performance, ensuring the repo
-    # stays lightweight and manageable.
+    # Prevents committing large files that can slow down repository
+    # performance, ensuring repo stays lightweight and manageable.
     - id: check-added-large-files
 
-    # Sorts Python package requirements in a requirements.txt file alphabetically, improving
-    # readability and simplifying dependency management.
-    # - id: requirements-txt-fixer
-
-    # Adds or adjusts the encoding pragma in Python source files, ensuring compatibility with the
-    # Python interpreter across different encodings.
-    - id: fix-encoding-pragma
-
-    # Identifies accidentally committed private keys, protecting sensitive information from being
-    # exposed in public repositories.
-    - id: detect-private-key
-
-    # Verifies that scripts with a shebang are marked as executable, ensuring proper script
-    # execution in Unix-based systems.
-    - id: check-shebang-scripts-are-executable
-
-    # Detects filename conflicts that arise due to case-insensitive filesystems, preventing issues
-    # in cross-platform projects.
+    # Detects filename conflicts that arise due to case-insensitive
+    # filesystems, preventing issues in cross-platform projects.
     - id: check-case-conflict
 
-  # Enforces a consistent code formatting style throughout the project, improving code readability
+    # Attempts to load all json files to verify syntax.
+    - id: check-json
+
+    # Checks that all your JSON files are pretty. "Pretty" here means that keys
+    # are sorted and indented.
+    - id: pretty-format-json
+      args: ['--autofix']
+
+    # Checks for a common error of placing code before docstring. This can lead
+    # to code being executed before docstring is read, causing confusion and
+    # potential issues.
+    - id: check-docstring-first
+
+    # Removes unnecessary whitespace at end of lines, improving code
+    # readability and preventing potential issues in certain editors.
+    - id: trailing-whitespace
+
+    # Ensures files end with a newline, providing consistency across codebases
+    # and conforming to POSIX standards for better interoperability.
+    - id: end-of-file-fixer
+
+    # Checks for UTF-8 byte order marker (BOM) in files, preventing potential
+    # issues with BOMs in Python source files.
+    - id: fix-byte-order-marker
+
+    # Checks for merge conflicts in repository, preventing accidental merge
+    # conflicts from being committed.
+    - id: check-merge-conflict
+
+    # Check for debugger imports and py37+ breakpoint() calls in python source.
+    - id: debug-statements
+
+    # Checks that executables have a shebang, ensuring that script is executed
+    # with correct interpreter.
+    - id: check-executables-have-shebangs
+
+    # Verifies that scripts with a shebang are marked as executable, ensuring
+    # proper script execution in Unix-based systems.
+    - id: check-shebang-scripts-are-executable
+
+    # Checks for symlinks which do not point to anything. This can happen when
+    # target of symlink is removed.
+    - id: check-symlinks
+
+    # Detects symlinks which are changed to regular files with a content of a
+    # path which that symlink was pointing to. This usually happens on Windows
+    # when a user clones a repository that has symlinks but they do not have
+    # permission to create symlinks.
+    - id: destroyed-symlinks
+
+    # Validates YAML files' syntax and structure, preventing potential issues
+    # caused by improperly formatted configuration files.
+    - id: check-yaml
+
+    # Attempts to load all TOML files to verify syntax.
+    - id: check-toml
+
+    # Sorts Python package requirements in a requirements.txt file
+    # alphabetically, improving readability and simplifying dependency
+    # management.
+    - id: requirements-txt-fixer
+
+    # Identifies accidentally committed private keys, protecting sensitive
+    # information from being exposed in public repositories.
+    - id: detect-private-key
+
+    # verifies that test files are named correctly. Files should be named
+    # `test_*.py` or `*_test.py`.
+    - id: name-tests-test
+
+  # A tool (and pre-commit hook) to automatically upgrade syntax for newer versions of language.
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.15.2
+    hooks:
+    - id: pyupgrade
+
+  # Enforces a consistent code formatting style throughout project, improving code readability
   # and reducing formatting-related discussions during code reviews.
   - repo: https://github.com/psf/black
     rev: 24.4.2
@@ -62,16 +110,16 @@ repos:
     # Ruff version.
     rev: v0.4.3
     hooks:
-      # Run the linter.
+      # Run linter.
       - id: ruff
-      # Run the formatter.
+      # Run formatter.
       - id: ruff-format
         args: ["--line-length", "79"]
 
   # Scans Python dependencies for known security vulnerabilities, alerting developers to potential
   # risks and helping ensure a secure application.
   - repo: https://github.com/twu/skjold
-    rev: v0.6.1
+    rev: v0.6.2
     hooks:
     - id: skjold
       verbose: true

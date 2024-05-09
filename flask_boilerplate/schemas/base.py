@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Base Read Validation Schemas
 
