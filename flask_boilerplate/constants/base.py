@@ -17,3 +17,5 @@ TOTAL_RECORDS: int = 1
 TOTAL_PAGES: int = 1
 PAGE: int = 1
 LIMIT: int = 10
+
+CONTENT_TYPE_JSON: dict = {"Content-Type": "application/json"}

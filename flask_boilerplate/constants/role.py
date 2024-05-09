@@ -7,6 +7,8 @@ Description:
 
 """
 
+ROLE: str = "Role"
+
 ROLE_NAME: str = "admin"
 ROLE_DESCRIPTION: str = "Admin Role Description"
 

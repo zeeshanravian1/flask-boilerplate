@@ -34,6 +34,8 @@ CORS_ALLOW_METHODS: str = env.str("CORS_ALLOW_METHODS")
 CORS_ALLOW_HEADERS: str = env.str("CORS_ALLOW_HEADERS")
 CORS_ALLOW_CREDENTIALS: bool = env.bool("CORS_ALLOW_CREDENTIALS")
 
+
+# Project
 PROJECT_TITLE: str = "Flask BoilerPlate"
 PROJECT_DESCRIPTION: str = "Flask BoilerPlate Documentation"
 

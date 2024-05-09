@@ -61,13 +61,13 @@ class BaseRepository:
 
         """
 
-        record = self.model(**entity)
+        db_instance = self.model(**entity)
 
-        db.session.add(record)
+        db.session.add(db_instance)
         db.session.commit()
-        db.session.refresh(record)
+        db.session.refresh(db_instance)
 
-        return entity
+        return db_instance
 
     def read_by_id(self, entity_id) -> Any | None:
         """
@@ -155,7 +155,7 @@ class BaseRepository:
         db.session.execute(statement=query)
         db.session.commit()
 
-        return entity
+        return self.read_by_id(entity_id=entity_id)
 
     def delete(self, entity_id) -> None:
         """
@@ -172,6 +172,13 @@ class BaseRepository:
 
         """
 
+        entity = self.read_by_id(entity_id=entity_id)
+
+        if not entity:
+            return
+
         query: Delete = delete(self.model).where(self.model.id == entity_id)
         db.session.execute(statement=query)
         db.session.commit()
+
+        return entity

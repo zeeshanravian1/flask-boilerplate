@@ -125,7 +125,7 @@ class BaseService:
 
         return self.repository.update(entity_id=entity_id, entity=entity)
 
-    def delete(self, entity_id) -> None:
+    def delete(self, entity_id):
         """
         Delete Entity
 
@@ -140,4 +140,4 @@ class BaseService:
 
         """
 
-        self.repository.delete(entity_id=entity_id)
+        return self.repository.delete(entity_id=entity_id)

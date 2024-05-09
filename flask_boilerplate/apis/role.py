@@ -7,10 +7,19 @@ Description:
 
 """
 
-from flask import Blueprint, request
+from http import HTTPStatus
 
-from flask_boilerplate.constants.role import ROLE_COLUMN
-from flask_boilerplate.schemas.role import RoleReadSchema
+from flask import Blueprint, request
+from marshmallow import ValidationError
+
+from flask_boilerplate.constants.base import CONTENT_TYPE_JSON
+from flask_boilerplate.constants.role import ROLE, ROLE_COLUMN
+from flask_boilerplate.responses.role import RoleResponse
+from flask_boilerplate.schemas.role import (
+    RoleCreateSchema,
+    RoleReadSchema,
+    RoleUpdateSchema,
+)
 from flask_boilerplate.services.role import RoleService
 
 role_router = Blueprint(name="role", import_name=__name__, url_prefix="/role")
@@ -33,9 +42,17 @@ def create_role():
 
     """
 
-    role = RoleService().create(request.json)
+    # Validate JSON data
+    try:
+        json_data = RoleCreateSchema().load(data=request.get_json())
 
-    return RoleReadSchema().dump(role)
+    except ValidationError as err:
+        return err.messages, HTTPStatus.UNPROCESSABLE_ENTITY, CONTENT_TYPE_JSON
+
+    # Create role
+    role = RoleService().create(entity=json_data)
+
+    return RoleResponse.create_response(data=RoleReadSchema().dump(role))
 
 
 # Get role by ID
@@ -55,9 +72,12 @@ def read_role_by_id(role_id: int):
 
     """
 
-    role = RoleService().read_by_id(role_id)
+    role = RoleService().read_by_id(entity_id=role_id)
 
-    return RoleReadSchema().dump(role)
+    if not role:
+        return RoleResponse.not_found_response(data=ROLE)
+
+    return RoleResponse.read_response(data=RoleReadSchema().dump(role))
 
 
 # Get role by name
@@ -81,7 +101,10 @@ def read_role_by_name(role_name: str):
         entity_column=ROLE_COLUMN, entity_name=role_name
     )
 
-    return RoleReadSchema().dump(role)
+    if not role:
+        return RoleResponse.not_found_response(data=ROLE)
+
+    return RoleResponse.read_response(data=RoleReadSchema().dump(role))
 
 
 # Get all roles
@@ -100,7 +123,9 @@ def read_all_roles():
 
     roles = RoleService().read_all()
 
-    return RoleReadSchema().dump(roles, many=True)
+    return RoleResponse.read_all_response(
+        data=RoleReadSchema().dump(roles, many=True)
+    )
 
 
 # Update role by ID
@@ -123,14 +148,24 @@ def update_role(role_id: int):
 
     """
 
-    role = RoleService().update(role_id, request.json)
+    # Validate JSON data
+    try:
+        json_data = RoleUpdateSchema().load(data=request.get_json())
 
-    return RoleReadSchema().dump(role)
+    except ValidationError as err:
+        return err.messages, HTTPStatus.UNPROCESSABLE_ENTITY, CONTENT_TYPE_JSON
+
+    role = RoleService().update(entity_id=role_id, entity=json_data)
+
+    if not role:
+        return RoleResponse.not_found_response(data=ROLE)
+
+    return RoleResponse.update_response(data=RoleReadSchema().dump(role))
 
 
 # Delete role by ID
 @role_router.route("/<int:role_id>", methods=["DELETE"])
-def delete_role(role_id: int) -> dict[str, str]:
+def delete_role(role_id: int):
     """
     Delete Role by ID
 
@@ -145,6 +180,9 @@ def delete_role(role_id: int) -> dict[str, str]:
 
     """
 
-    RoleService().delete(role_id)
+    role = RoleService().delete(role_id)
 
-    return {"message": "Role deleted successfully."}
+    if not role:
+        return RoleResponse.not_found_response(data=ROLE)
+
+    return RoleResponse.delete_response()

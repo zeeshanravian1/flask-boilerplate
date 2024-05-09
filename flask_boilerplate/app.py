@@ -13,7 +13,6 @@ Description:
 from flask import Flask
 from flask_cors import CORS
 
-
 from .core.config import (
     CORS_ALLOW_CREDENTIALS,
     CORS_ALLOW_HEADERS,
@@ -45,6 +44,9 @@ def create_app() -> Flask:
 
     # Configure the application with the database URL
     app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
+
+    # Disable the SQLAlchemy track modifications
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
     # Initialize the app with the SQLAlchemy database
     db.init_app(app)
