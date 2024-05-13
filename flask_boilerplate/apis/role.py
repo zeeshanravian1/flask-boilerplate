@@ -8,180 +8,156 @@ Description:
 
 from http import HTTPStatus
 
-from flask import Blueprint, request
-from marshmallow import ValidationError
+from flask import request
+from flask_restx import Resource
 
-from flask_boilerplate.constants.base import CONTENT_TYPE_JSON
-from flask_boilerplate.constants.role import ROLE, ROLE_COLUMN
+from flask_boilerplate.constants.role import ROLE, ROLE_DELETE_SUCCESS
+from flask_boilerplate.namespaces.role import ns_role
 from flask_boilerplate.responses.role import RoleResponse
 from flask_boilerplate.schemas.role import (
-    RoleCreateSchema,
-    RoleReadSchema,
-    RoleUpdateSchema,
+    role_create_schema,
+    role_read_all_schema,
+    role_read_schema,
+    role_update_schema,
 )
 from flask_boilerplate.services.role import RoleService
 
-role_router = Blueprint(name="role", import_name=__name__, url_prefix="/role")
 
-
-# Create Role
-@role_router.route("", methods=["POST"])
-def create_role():
+# Resource to handle listing and adding roles
+@ns_role.route("/")
+class RoleListResource(Resource):
     """
-    Create Role
+    Role List Resource
 
     Description:
-        - This is used to create a new role.
-
-    Request:
-        - `role (RoleCreateSchema)`: Role object.
-
-    Returns:
-        - `role (RoleCreateSchema)`: Role object.
+        - This class is used to handle listing and adding roles.
 
     """
 
-    # Validate JSON data
-    try:
-        json_data = RoleCreateSchema().load(data=request.get_json())
+    @ns_role.expect(role_create_schema, validate=True)
+    @ns_role.marshal_with(fields=role_read_schema, code=HTTPStatus.CREATED)
+    def post(self):
+        """
+        Add Role
 
-    except ValidationError as err:
-        return err.messages, HTTPStatus.UNPROCESSABLE_ENTITY, CONTENT_TYPE_JSON
+        Description:
+            - This function is used to add a new role.
 
-    # Create role
-    role = RoleService().create(entity=json_data)
+        Args:
+            - `None`
 
-    return RoleResponse.create_response(data=RoleReadSchema().dump(role))
+        Returns:
+            - `dict`: A dictionary containing the newly created role.
+
+        """
+
+        role = RoleService().create(entity=request.get_json())
+
+        return RoleResponse.create_response(data=role)
+
+    @ns_role.marshal_with(fields=role_read_all_schema, code=HTTPStatus.OK)
+    def get(self):
+        """
+        List Roles
+
+        Description:
+            - This function is used to list all roles.
+
+        Args:
+            - `None`
+
+        Returns:
+            - `dict`: A dictionary containing list of roles.
+
+        """
+
+        # Get all roles
+        roles = RoleService().read_all()
+
+        return RoleResponse.read_all_response(data=roles)
 
 
-# Get role by ID
-@role_router.route("/<int:role_id>", methods=["GET"])
-def read_role_by_id(role_id: int):
+# Resource to handle get, update, delete single role
+@ns_role.route("/<int:role_id>")
+class RoleResource(Resource):
     """
-    Read Role by ID
+    Role Resource
 
     Description:
-        - This is used to read role by ID.
-
-    Args:
-        - `role_id (int)`: Role ID. **(Required)**
-
-    Returns:
-        - `role (RoleCreateSchema)`: Role object.
+        - This class is used to handle get, update, delete single role.
 
     """
 
-    role = RoleService().read_by_id(entity_id=role_id)
+    @ns_role.marshal_with(fields=role_read_schema, code=HTTPStatus.OK)
+    def get(self, role_id):
+        """
+        Get Role
 
-    if not role:
-        return RoleResponse.not_found_response(data=ROLE)
+        Description:
+            - This function is used to get a role.
 
-    return RoleResponse.read_response(data=RoleReadSchema().dump(role))
+        Args:
+            - `role_id (int)`: Role ID. **(Required)**
 
+        Returns:
+            - `dict`: A dictionary containing the role.
 
-# Get role by name
-@role_router.route("/<string:role_name>", methods=["GET"])
-def read_role_by_name(role_name: str):
-    """
-    Read Role by Name
+        """
 
-    Description:
-        - This is used to read role by name.
+        role = RoleService().read_by_id(entity_id=role_id)
 
-    Args:
-        - `role_name (str)`: Role Name. **(Required)**
+        if not role:
+            return RoleResponse.not_found_response(data=ROLE)
 
-    Returns:
-        - `role (RoleCreateSchema)`: Role object.
+        return RoleResponse.read_response(data=role)
 
-    """
+    @ns_role.expect(role_update_schema, validate=True)
+    @ns_role.marshal_with(fields=role_read_schema, code=HTTPStatus.ACCEPTED)
+    def put(self, role_id):
+        """
+        Update Role
 
-    role = RoleService().read_by_name(
-        entity_column=ROLE_COLUMN, entity_name=role_name
+        Description:
+            - This function is used to update a role.
+
+        Args:
+            - `role_id (int)`: Role ID. **(Required)**
+
+        Returns:
+            - `dict`: A dictionary containing the updated role.
+
+        """
+
+        role = RoleService().update(
+            entity_id=role_id, entity=request.get_json()
+        )
+
+        if not role:
+            return RoleResponse.not_found_response(data=ROLE)
+
+        return RoleResponse.update_response(data=role)
+
+    @ns_role.response(
+        code=HTTPStatus.NO_CONTENT, description=ROLE_DELETE_SUCCESS
     )
+    def delete(self, role_id):
+        """
+        Delete Role
 
-    if not role:
-        return RoleResponse.not_found_response(data=ROLE)
+        Description:
+            - This function is used to delete a role.
 
-    return RoleResponse.read_response(data=RoleReadSchema().dump(role))
+        Args:
+            - `role_id (int)`: Role ID. **(Required)**
 
+        Returns:
+            - `dict`: A dictionary containing the deleted role.
 
-# Get all roles
-@role_router.route("", methods=["GET"])
-def read_all_roles():
-    """
-    Read All Roles
+        """
 
-    Description:
-        - This is used to read all roles.
+        role = RoleService().delete(entity_id=role_id)
 
-    Returns:
-        - `roles (List[RoleCreateSchema])`: List of role objects.
+        if not role:
+            return RoleResponse.not_found_response(data=ROLE)
 
-    """
-
-    roles = RoleService().read_all()
-
-    return RoleResponse.read_all_response(
-        data=RoleReadSchema().dump(roles, many=True)
-    )
-
-
-# Update role by ID
-@role_router.route("/<int:role_id>", methods=["PUT"])
-def update_role(role_id: int):
-    """
-    Update Role by ID
-
-    Description:
-        - This is used to update role by ID.
-
-    Args:
-        - `role_id (int)`: Role ID. **(Required)**
-
-    Request:
-        - `role (RoleCreateSchema)`: Role object.
-
-    Returns:
-        - `role (RoleCreateSchema)`: Role object.
-
-    """
-
-    # Validate JSON data
-    try:
-        json_data = RoleUpdateSchema().load(data=request.get_json())
-
-    except ValidationError as err:
-        return err.messages, HTTPStatus.UNPROCESSABLE_ENTITY, CONTENT_TYPE_JSON
-
-    role = RoleService().update(entity_id=role_id, entity=json_data)
-
-    if not role:
-        return RoleResponse.not_found_response(data=ROLE)
-
-    return RoleResponse.update_response(data=RoleReadSchema().dump(role))
-
-
-# Delete role by ID
-@role_router.route("/<int:role_id>", methods=["DELETE"])
-def delete_role(role_id: int):
-    """
-    Delete Role by ID
-
-    Description:
-        - This is used to delete role by ID.
-
-    Args:
-        - `role_id (int)`: Role ID. **(Required)**
-
-    Returns:
-        - `message (str)`: Success message.
-
-    """
-
-    role = RoleService().delete(role_id)
-
-    if not role:
-        return RoleResponse.not_found_response(data=ROLE)
-
-    return RoleResponse.delete_response()
+        return RoleResponse.delete_response()

@@ -53,6 +53,7 @@ class BaseTable(DeclarativeBase):
         Generate table name automatically.
 
         """
+
         return self.__name__.lower().replace("table", "")
 
     # Convert to dictionary
@@ -61,7 +62,15 @@ class BaseTable(DeclarativeBase):
         Convert to dictionary.
 
         """
-        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
+        return {
+            c.name: (
+                getattr(self, c.name).isoformat()
+                if isinstance(getattr(self, c.name), datetime)
+                else getattr(self, c.name)
+            )
+            for c in self.__table__.columns
+        }
 
 
 # Initialize SQLAlchemy with BaseTable

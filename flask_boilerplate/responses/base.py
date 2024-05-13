@@ -6,7 +6,6 @@ Description:
 
 """
 
-import json
 from http import HTTPStatus
 
 from flask_boilerplate.constants.base import CONTENT_TYPE_JSON
@@ -38,7 +37,7 @@ class BaseResponse:
         """
 
         return (
-            json.dumps({"success": True, "data": data}),
+            {"success": True, "data": data.to_dict()},
             HTTPStatus.CREATED,
             CONTENT_TYPE_JSON,
         )
@@ -60,7 +59,7 @@ class BaseResponse:
         """
 
         return (
-            json.dumps({"success": True, "data": data}),
+            {"success": True, "data": data.to_dict()},
             HTTPStatus.OK,
             CONTENT_TYPE_JSON,
         )
@@ -82,7 +81,7 @@ class BaseResponse:
         """
 
         return (
-            json.dumps({"success": True, "data": data}),
+            {"success": True, "data": [item.to_dict() for item in data]},
             HTTPStatus.OK,
             CONTENT_TYPE_JSON,
         )
@@ -104,7 +103,7 @@ class BaseResponse:
         """
 
         return (
-            json.dumps({"success": True, "data": data}),
+            {"success": True, "data": data.to_dict()},
             HTTPStatus.ACCEPTED,
             CONTENT_TYPE_JSON,
         )
@@ -126,7 +125,7 @@ class BaseResponse:
         """
 
         return (
-            json.dumps({"success": True}),
+            {"success": True},
             HTTPStatus.NO_CONTENT,
             CONTENT_TYPE_JSON,
         )
@@ -140,7 +139,7 @@ class BaseResponse:
             - This is used to return not found response.
 
         Args:
-            - `data (dict)`: Data object. **(Required)**
+            - `data (str)`: Model name. **(Required)**
 
         Returns:
             - `response (tuple)`: Response tuple.
@@ -148,7 +147,7 @@ class BaseResponse:
         """
 
         return (
-            json.dumps({"success": False, "message": f"{data} not found"}),
+            {"success": False, "message": f"{data} not found"},
             HTTPStatus.NOT_FOUND,
             CONTENT_TYPE_JSON,
         )

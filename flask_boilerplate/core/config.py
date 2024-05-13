@@ -38,5 +38,9 @@ CORS_ALLOW_CREDENTIALS: bool = env.bool("CORS_ALLOW_CREDENTIALS")
 PROJECT_TITLE: str = "Flask BoilerPlate"
 PROJECT_DESCRIPTION: str = "Flask BoilerPlate Documentation"
 
-VERSION: str = "0.1.0"
+PROJECT_VERSION: str = "0.1.0"
 API_PREFIX: str = "/api/v1"
+DOCS_URL: str = "/docs"
+
+SQLALCHEMY_TRACK_MODIFICATIONS: bool = False
+SWAGGER_UI_DOC_EXPANSION: str = "list"
