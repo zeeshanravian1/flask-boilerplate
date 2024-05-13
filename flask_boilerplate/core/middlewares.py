@@ -13,13 +13,15 @@ import re
 from http import HTTPStatus
 
 from flask import Flask, jsonify
-from psycopg2.errors import (
-    ForeignKeyViolation,  # pylint: disable=E0611
+from psycopg2.errors import (  # pylint: disable=E0611
+    ForeignKeyViolation,
     NotNullViolation,
     UniqueViolation,
 )
 from sqlalchemy.exc import IntegrityError
 from werkzeug.exceptions import HTTPException
+
+from flask_boilerplate.constants.base import ERROR_MESSAGES
 
 
 class ExceptionHandler:
@@ -71,7 +73,9 @@ class ExceptionHandler:
 
         status_code: int | None = HTTPStatus.INTERNAL_SERVER_ERROR
         success: bool = False
-        err_message: str | None = "Internal Server Error"
+        err_message: str | None = ERROR_MESSAGES.get(
+            str(HTTPStatus.INTERNAL_SERVER_ERROR)
+        )
 
         # Handle specific exceptions
         if isinstance(err, IntegrityError):
@@ -97,7 +101,7 @@ class ExceptionHandler:
                 ).strip()
 
             else:
-                err_message = "Integrity Error"
+                err_message = ERROR_MESSAGES.get(str(HTTPStatus.CONFLICT))
 
         if isinstance(err, HTTPException):
             status_code = err.code
