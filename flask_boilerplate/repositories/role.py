@@ -6,7 +6,7 @@ Description:
 
 """
 
-from flask_boilerplate.models.role import RolesTable
+from flask_boilerplate.models.role import RoleTable
 
 from .base import BaseRepository
 
@@ -29,4 +29,4 @@ class RoleRepository(BaseRepository):
 
         """
 
-        super().__init__(RolesTable)
+        super().__init__(RoleTable)

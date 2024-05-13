@@ -14,6 +14,7 @@ from flask_cors import CORS
 from flask_restx import Api, Resource
 
 from flask_boilerplate.apis.role import ns_role
+from flask_boilerplate.apis.user import ns_user
 from flask_boilerplate.core.config import (
     CORS_ALLOW_CREDENTIALS,
     CORS_ALLOW_HEADERS,
@@ -59,7 +60,7 @@ CORS(
     supports_credentials=CORS_ALLOW_CREDENTIALS,
     origins=CORS_ALLOW_ORIGINS.split(","),
     methods=CORS_ALLOW_METHODS.split(","),
-    headers=CORS_ALLOW_HEADERS.split(","),
+    expose_headers=CORS_ALLOW_HEADERS.split(","),
 )
 
 
@@ -94,3 +95,4 @@ class Home(Resource):
 
 # Register namespaces
 api.add_namespace(ns_role)
+api.add_namespace(ns_user)

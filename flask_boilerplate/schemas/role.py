@@ -18,9 +18,7 @@ from flask_boilerplate.namespaces.role import ns_role
 role_base_schema: Model | OrderedModel = ns_role.model(
     name="RoleBaseSchema",
     model={
-        "role_name": String(
-            required=True, min_length=1, max_length=2_55, example=ROLE_NAME
-        ),
+        "role_name": String(min_length=1, max_length=2_55, example=ROLE_NAME),
         "role_description": String(
             min_length=1, max_length=2_55, example=ROLE_DESCRIPTION
         ),
@@ -74,5 +72,7 @@ role_read_all_schema: Model | OrderedModel = ns_role.model(
 
 # Role Update Schema
 role_update_schema: Model | OrderedModel = ns_role.inherit(
-    "RoleUpdateSchema", role_base_schema
+    "RoleUpdateSchema",
+    role_base_schema,
+    {"role_name": String(required=True)},
 )

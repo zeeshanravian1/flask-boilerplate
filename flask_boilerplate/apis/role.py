@@ -44,10 +44,17 @@ class RoleListResource(Resource):
             - This function is used to add a new role.
 
         Args:
-            - `None`
+        Role details to be created with following fields:
+            - `role_name (str)`: Name of role. **(Required)**
+            - `role_description (str)`: Description of role. **(Optional)**
 
         Returns:
-            - `dict`: A dictionary containing the newly created role.
+        Role details along with following information:
+            - `id (int)`: ID of role.
+            - `role_name (str)`: Name of role.
+            - `role_description (str)`: Description of role.
+            - `created_at (str)`: Datetime of role creation.
+            - `updated_at (str)`: Datetime of role updation.
 
         """
 
@@ -58,16 +65,21 @@ class RoleListResource(Resource):
     @ns_role.marshal_with(fields=role_read_all_schema, code=HTTPStatus.OK)
     def get(self):
         """
-        List Roles
+        Get all Roles
 
         Description:
-            - This function is used to list all roles.
+            - This function is used to get all roles.
 
         Args:
             - `None`
 
         Returns:
-            - `dict`: A dictionary containing list of roles.
+        Get all roles with following information:
+            - `id (int)`: ID of role.
+            - `role_name (str)`: Name of role.
+            - `role_description (str)`: Description of role.
+            - `created_at (str)`: Datetime of role creation.
+            - `updated_at (str)`: Datetime of role updation.
 
         """
 
@@ -94,13 +106,18 @@ class RoleResource(Resource):
         Get Role
 
         Description:
-            - This function is used to get a role.
+            - This function is used to get a single role by providing role ID.
 
         Args:
-            - `role_id (int)`: Role ID. **(Required)**
+            - `role_id (int)`: ID of role. **(Required)**
 
         Returns:
-            - `dict`: A dictionary containing the role.
+        Single Role details along with following information:
+            - `id (int)`: ID of role.
+            - `role_name (str)`: Name of role.
+            - `role_description (str)`: Description of role.
+            - `created_at (str)`: Datetime of role creation.
+            - `updated_at (str)`: Datetime of role updation.
 
         """
 
@@ -118,13 +135,22 @@ class RoleResource(Resource):
         Update Role
 
         Description:
-            - This function is used to update a role.
+            - This function is used to update a single role by providing role
+            ID.
 
         Args:
-            - `role_id (int)`: Role ID. **(Required)**
+            - `role_id (int)`: ID of role. **(Required)**
+            Role details to be updated with following fields:
+            - `role_name (str)`: Name of role. **(Required)**
+            - `role_description (str)`: Description of role. **(Optional)**
 
         Returns:
-            - `dict`: A dictionary containing the updated role.
+        Updated Role details along with following information:
+            - `id (int)`: ID of role.
+            - `role_name (str)`: Name of role.
+            - `role_description (str)`: Description of role.
+            - `created_at (str)`: Datetime of role creation.
+            - `updated_at (str)`: Datetime of role updation.
 
         """
 
@@ -148,10 +174,10 @@ class RoleResource(Resource):
             - This function is used to delete a role.
 
         Args:
-            - `role_id (int)`: Role ID. **(Required)**
+            - `role_id (int)`: ID of role. **(Required)**
 
         Returns:
-            - `dict`: A dictionary containing the deleted role.
+            - `None`
 
         """
 

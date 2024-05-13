@@ -12,12 +12,12 @@ from sqlalchemy.orm import Mapped, mapped_column
 from flask_boilerplate.database.base import BaseTable
 
 
-class RolesTable(BaseTable):
+class RoleTable(BaseTable):
     """
-    Roles Table
+    Role Table
 
     Description:
-        - This table is used to create roles in database.
+        - This table is used to create role in database.
 
     """
 
