@@ -28,10 +28,14 @@ from flask_boilerplate.core.config import (
     SQLALCHEMY_TRACK_MODIFICATIONS,
     SWAGGER_UI_DOC_EXPANSION,
 )
+from flask_boilerplate.core.middlewares import ExceptionHandler
 from flask_boilerplate.database.base import db
 
 # Initialize Flask application instance
 app = Flask(__name__)
+
+# Initialize ExceptionHandler instance
+ExceptionHandler(app)
 
 # Initialize RestX API instance
 api = Api(

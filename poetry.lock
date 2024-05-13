@@ -3188,6 +3188,17 @@ files = [
 ]
 
 [[package]]
+name = "types-psycopg2"
+version = "2.9.21.20240417"
+description = "Typing stubs for psycopg2"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "types-psycopg2-2.9.21.20240417.tar.gz", hash = "sha256:05db256f4a459fb21a426b8e7fca0656c3539105ff0208eaf6bdaf406a387087"},
+    {file = "types_psycopg2-2.9.21.20240417-py3-none-any.whl", hash = "sha256:644d6644d64ebbe37203229b00771012fb3b3bddd507a129a2e136485990e4f8"},
+]
+
+[[package]]
 name = "types-python-dateutil"
 version = "2.9.0.20240316"
 description = "Typing stubs for python-dateutil"
@@ -3471,4 +3482,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "e144d1bc4d03395764fb70b8ebd6017b278fac0775287692cb42d4764fe609df"
+content-hash = "4463969053aabc4804dc33e49858db7c86cd7d1628d7b79542363a5237d52b72"
