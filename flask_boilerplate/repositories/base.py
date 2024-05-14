@@ -8,11 +8,6 @@ Description:
 
 from typing import Any, Sequence
 
-from sqlalchemy import delete, select, update
-from sqlalchemy.engine.result import Result
-from sqlalchemy.sql.dml import Delete, Update
-from sqlalchemy.sql.selectable import Select
-
 from flask_boilerplate.database.base import db
 
 
@@ -83,10 +78,7 @@ class BaseRepository:
 
         """
 
-        query: Select = select(self.model).where(self.model.id == entity_id)
-        entity: Result[Any] = db.session.execute(statement=query)
-
-        return entity.scalars().first()
+        return db.session.query(self.model).get(ident=entity_id)
 
     def read_by_name(self, entity_column, entity_name) -> Any | None:
         """
@@ -104,12 +96,11 @@ class BaseRepository:
 
         """
 
-        query: Select = select(self.model).where(
-            getattr(self.model, entity_column) == entity_name
+        return (
+            db.session.query(self.model)
+            .filter_by(**{entity_column: entity_name})
+            .first()
         )
-        entity: Result[Any] = db.session.execute(statement=query)
-
-        return entity.scalars().first()
 
     def read_all(self) -> Sequence[Any]:
         """
@@ -127,12 +118,9 @@ class BaseRepository:
 
         """
 
-        query: Select = select(self.model)
-        entities: Result[Any] = db.session.execute(statement=query)
+        return db.session.query(self.model).all()
 
-        return entities.scalars().all()
-
-    def update(self, entity_id, entity) -> Any | None:
+    def update(self, entity_id, entity) -> Any | bool:
         """
         Update Entity
 
@@ -148,15 +136,20 @@ class BaseRepository:
 
         """
 
-        query: Update = (
-            update(self.model).where(self.model.id == entity_id).values(entity)
-        )
-        db.session.execute(statement=query)
+        db_instance = self.read_by_id(entity_id)
+
+        if not db_instance:
+            return False
+
+        for key, value in entity.items():
+            setattr(db_instance, key, value)
+
         db.session.commit()
+        db.session.refresh(db_instance)
 
-        return self.read_by_id(entity_id=entity_id)
+        return db_instance
 
-    def delete(self, entity_id) -> None:
+    def delete(self, entity_id) -> bool:
         """
         Delete Entity
 
@@ -171,13 +164,12 @@ class BaseRepository:
 
         """
 
-        entity = self.read_by_id(entity_id=entity_id)
+        db_instance = db.session.query(self.model).get(ident=entity_id)
 
-        if not entity:
-            return
+        if not db_instance:
+            return False
 
-        query: Delete = delete(self.model).where(self.model.id == entity_id)
-        db.session.execute(statement=query)
+        db.session.delete(db_instance)
         db.session.commit()
 
-        return entity
+        return True

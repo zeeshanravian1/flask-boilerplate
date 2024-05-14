@@ -9,6 +9,8 @@ Description:
 
 """
 
+from logging import Logger
+
 from flask import Flask
 from flask_cors import CORS
 from flask_restx import Api, Resource
@@ -28,6 +30,7 @@ from flask_boilerplate.core.config import (
     SQLALCHEMY_TRACK_MODIFICATIONS,
     SWAGGER_UI_DOC_EXPANSION,
 )
+from flask_boilerplate.core.logger import AppLogger
 from flask_boilerplate.core.middlewares import ExceptionHandler
 from flask_boilerplate.database.base import db
 
@@ -36,6 +39,9 @@ app = Flask(__name__)
 
 # Initialize ExceptionHandler instance
 ExceptionHandler(app)
+
+# Initialize logger instance
+logger: Logger = AppLogger().get_logger()
 
 # Initialize RestX API instance
 api = Api(
@@ -100,3 +106,9 @@ class Home(Resource):
 # Register namespaces
 api.add_namespace(ns_role)
 api.add_namespace(ns_user)
+
+
+# Main function to run application
+if __name__ == "__main__":
+    logger.info("Starting Flask application")
+    app.run(debug=True, host="0.0.0.0", port=5000)

@@ -41,4 +41,4 @@ class UserTable(BaseTable):
     )
 
     # Relationships
-    role: Mapped[RoleTable] = relationship(RoleTable, backref="users")
+    role: Mapped[RoleTable] = relationship(back_populates="users")

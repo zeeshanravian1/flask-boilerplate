@@ -12,6 +12,8 @@ import environs
 # Creating env object
 env = environs.Env()
 
+# Reading environment file
+env.read_env()
 
 # Database
 DATABASE: str = env.str("DATABASE")
