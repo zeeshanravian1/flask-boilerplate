@@ -13,6 +13,7 @@ from logging import Logger
 
 from flask import Flask
 from flask_cors import CORS
+from flask_migrate import Migrate
 from flask_restx import Api, Resource
 
 from flask_boilerplate.apis.role import ns_role
@@ -62,7 +63,10 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = SQLALCHEMY_TRACK_MODIFICATIONS
 app.config["SWAGGER_UI_DOC_EXPANSION"] = SWAGGER_UI_DOC_EXPANSION
 
 # Initialize app with SQLAlchemy database
-db.init_app(app)
+db.init_app(app=app)
+
+# Initialize Migrate instance
+Migrate(app=app, db=db)
 
 # Enable CORS
 CORS(

@@ -10,7 +10,7 @@ Description:
 from datetime import datetime
 
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import DateTime, MetaData
+from sqlalchemy import DateTime
 from sqlalchemy.orm import (
     DeclarativeBase,
     Mapped,
@@ -18,8 +18,6 @@ from sqlalchemy.orm import (
     mapped_column,
 )
 from sqlalchemy.sql.functions import now
-
-from flask_boilerplate.core.config import DB_SCHEMA
 
 
 class BaseTable(DeclarativeBase):
@@ -37,7 +35,6 @@ class BaseTable(DeclarativeBase):
     """
 
     __abstract__ = True
-    metadata = MetaData(schema=DB_SCHEMA)
 
     id: Mapped[int] = mapped_column(primary_key=True)
     created_at: Mapped[datetime] = mapped_column(

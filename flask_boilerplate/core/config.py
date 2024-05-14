@@ -22,7 +22,6 @@ DB_PORT: int = env.int("DB_PORT")
 DB_USER: str = env.str("DB_USER")
 DB_PASSWORD: str = env.str("DB_PASSWORD")
 DB_NAME: str = env.str("DB_NAME")
-DB_SCHEMA: str = env.str("DB_SCHEMA")
 
 DATABASE_URL: str = (
     f"{DATABASE}://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
