@@ -151,3 +151,29 @@ class BaseResponse:
             HTTPStatus.NOT_FOUND,
             CONTENT_TYPE_JSON,
         )
+
+    @staticmethod
+    def success(data):
+        """
+        Success Response
+
+        Description:
+            - This is used to return success response.
+
+        Args:
+            - `data (str)`:
+
+        Returns:
+            - `response (dict)`: Response dict.
+        """
+        response = {"status": "ok", "object": data}
+
+        return response
+
+    @staticmethod
+    def failure(error):
+        if not error:
+            error = ["Something went wrong."]
+        if isinstance(error, str):
+            error = [error]
+        return {"status": "nok", "errors": error}

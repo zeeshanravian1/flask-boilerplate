@@ -8,6 +8,7 @@ Description:
 
 from flask_boilerplate.repositories.user import UserRepository
 
+
 from .base import BaseService
 
 
@@ -30,3 +31,7 @@ class UserService(BaseService):
         """
 
         super().__init__(UserRepository)
+
+    def get_by_validate_user(self, email, password):
+        user = self.repository.get_validate_user(email, password)
+        return user

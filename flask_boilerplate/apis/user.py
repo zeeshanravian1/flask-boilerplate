@@ -6,6 +6,8 @@ Description:
 
 """
 
+import jwt
+from datetime import datetime, timedelta
 from http import HTTPStatus
 
 from flask import request
@@ -19,8 +21,12 @@ from flask_boilerplate.schemas.user import (
     user_read_all_schema,
     user_read_schema,
     user_update_schema,
+    user_login_schema,
+    user_login_response,
 )
 from flask_boilerplate.services.user import UserService
+from flask_boilerplate.core.config import TOKEN_EXPIRY, PRIVATE_KEY
+from flask_boilerplate.decorator.authorization import auth
 
 
 # Resource to handle listing and adding users
@@ -79,6 +85,7 @@ class UserListResource(Resource):
 
         return UserResponse.create_response(data=user)
 
+    @auth()
     @ns_user.marshal_with(fields=user_read_all_schema, code=HTTPStatus.OK)
     def get(self):
         """
@@ -236,3 +243,49 @@ class UserResource(Resource):
             return UserResponse.not_found_response(data=USER)
 
         return UserResponse.delete_response()
+
+
+@ns_user.route("/login")
+class UserLogin(Resource):
+    """
+    User Login
+
+    Description:
+        - This class is used to handle user login
+
+    """
+
+    @ns_user.expect(user_login_schema, validate=True)
+    @ns_user.marshal_with(fields=user_login_response, code=HTTPStatus.OK)
+    def post(self):
+        """
+        Login User
+
+        Description:
+            - This function is used to login a user.
+
+        Args:
+            - `email (str)`: Email of user. **(Required)**
+            - `password (str)`: Password of user. **(Required)**
+
+        Returns:
+            - `token (str)`: Access token.
+
+        """
+        user_email = ns_user.payload["email"]
+        user_password = ns_user.payload["password"]
+
+        user_services = UserService()
+        user = user_services.get_by_validate_user(user_email, user_password)
+        token = jwt.encode(
+            {
+                "sub": user.id,
+                "exp": datetime.utcnow() + timedelta(seconds=TOKEN_EXPIRY),
+                "role": user.role_id,
+            },
+            PRIVATE_KEY,
+            algorithm="RS256",
+        )
+        user = user.to_dict()
+        user["token"] = token
+        return UserResponse.success(data=user)

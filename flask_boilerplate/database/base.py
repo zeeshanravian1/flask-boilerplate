@@ -41,7 +41,7 @@ class BaseTable(DeclarativeBase):
         DateTime(timezone=True), default=now()
     )
     updated_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=True, onupdate=now()
+        DateTime(timezone=True), default=now(), onupdate=now()
     )
 
     @declared_attr.directive

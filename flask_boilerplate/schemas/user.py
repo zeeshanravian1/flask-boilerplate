@@ -121,3 +121,29 @@ user_update_schema: Model | OrderedModel = ns_user.inherit(
         "role_id": Integer(required=True),
     },
 )
+
+user_login_schema = ns_user.model(
+    "UserLoginSchema",
+    {"email": String(required=True), "password": String(required=True)},
+    strict=True,
+)
+
+user_login = ns_user.model(
+    "UserLogin",
+    {
+        "first_name": String(),
+        "last_name": String(),
+        "username": String(),
+        "email": String(),
+        "role_id": Integer(),
+        "token": String(),
+    },
+)
+
+user_login_response = ns_user.model(
+    "UserLoginResponse",
+    {
+        "status": String(description="ok|nok"),
+        "object": Nested(user_login, skip_none=True, allow_null=True),
+    },
+)
