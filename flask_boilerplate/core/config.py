@@ -13,6 +13,7 @@ import environs
 env = environs.Env()
 env.read_env()
 
+
 # Database
 DATABASE: str = env.str("DATABASE")
 DB_HOST: str = env.str("DB_HOST")

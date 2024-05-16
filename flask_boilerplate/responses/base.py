@@ -6,6 +6,7 @@ Description:
 
 """
 
+from typing import List
 from http import HTTPStatus
 
 from flask_boilerplate.constants.base import CONTENT_TYPE_JSON
@@ -153,7 +154,7 @@ class BaseResponse:
         )
 
     @staticmethod
-    def success(data):
+    def success(data: List = []):
         """
         Success Response
 
@@ -161,7 +162,7 @@ class BaseResponse:
             - This is used to return success response.
 
         Args:
-            - `data (str)`:
+            - `data (list)`:
 
         Returns:
             - `response (dict)`: Response dict.

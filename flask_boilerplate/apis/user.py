@@ -25,8 +25,9 @@ from flask_boilerplate.schemas.user import (
     user_login_response,
 )
 from flask_boilerplate.services.user import UserService
-from flask_boilerplate.core.config import TOKEN_EXPIRY, PRIVATE_KEY
+from flask_boilerplate.core.config import PRIVATE_KEY
 from flask_boilerplate.decorator.authorization import auth
+from flask_boilerplate.constants.base import TOKEN_EXPIRY_TIME
 
 
 # Resource to handle listing and adding users
@@ -277,15 +278,18 @@ class UserLogin(Resource):
 
         user_services = UserService()
         user = user_services.get_by_validate_user(user_email, user_password)
-        token = jwt.encode(
-            {
-                "sub": user.id,
-                "exp": datetime.utcnow() + timedelta(seconds=TOKEN_EXPIRY),
-                "role": user.role_id,
-            },
-            PRIVATE_KEY,
-            algorithm="RS256",
-        )
-        user = user.to_dict()
-        user["token"] = token
-        return UserResponse.success(data=user)
+        if user:
+            token = jwt.encode(
+                {
+                    "sub": user.id,
+                    "exp": datetime.utcnow()
+                    + timedelta(seconds=TOKEN_EXPIRY_TIME),
+                    "role": user.role_id,
+                },
+                PRIVATE_KEY,
+                algorithm="RS256",
+            )
+            user.token = token
+            return UserResponse.success(data=user)
+        else:
+            return UserResponse.failure("User not found")

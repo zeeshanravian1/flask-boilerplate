@@ -9,7 +9,7 @@ Description:
 from datetime import datetime, timezone
 
 from flask_restx import Model, OrderedModel
-from flask_restx.fields import Boolean, DateTime, Integer, Nested, String
+from flask_restx.fields import Boolean, DateTime, Integer, Nested, String, List
 
 from flask_boilerplate.constants.user import (
     ADDRESS,
@@ -145,5 +145,6 @@ user_login_response = ns_user.model(
     {
         "status": String(description="ok|nok"),
         "object": Nested(user_login, skip_none=True, allow_null=True),
+        "errors": List(String),
     },
 )

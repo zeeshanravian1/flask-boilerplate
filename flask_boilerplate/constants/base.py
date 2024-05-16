@@ -19,6 +19,7 @@ TOTAL_RECORDS: int = 1
 TOTAL_PAGES: int = 1
 PAGE: int = 1
 LIMIT: int = 10
+TOKEN_EXPIRY_TIME: int = 86400
 
 # Error Messages
 ERROR_MESSAGES: dict[str, str] = {

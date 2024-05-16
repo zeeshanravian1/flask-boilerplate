@@ -6,11 +6,6 @@ Description:
 
 """
 
-from typing import Any
-from sqlalchemy import select
-from sqlalchemy.engine.result import Result
-from sqlalchemy.sql.selectable import Select
-
 from passlib.hash import pbkdf2_sha256
 
 from flask_boilerplate.models.user import UserTable
@@ -59,14 +54,14 @@ class UserRepository(BaseRepository):
         return super().create(entity)
 
     def get_validate_user(self, email, passowrd):
-        # user = UserTable.query.filter(email == email).first()
-        query: Select = select(self.model).where(self.model.email == email)
-        user: Result[Any] = (
-            db.session.execute(statement=query).scalars().first()
+        user = (
+            db.session.query(UserTable)
+            .filter(UserTable.email == email)
+            .first()
         )
+        if user:
+            is_valid_user = pbkdf2_sha256.verify(passowrd, user.password)
+            if is_valid_user:
+                return user
 
-        is_valid_user = pbkdf2_sha256.verify(passowrd, user.password)
-        if is_valid_user:
-            return user
-
-        raise Exception
+        return None

@@ -13,3 +13,40 @@ services:
           path: .
           target: /usr/src/app
     command: [ "./scripts/run.sh" ]
+
+# services:
+#   postgres:
+#     image: postgres
+#     container_name: postgres-container
+#     env_file:
+#       - .env
+#     environment:
+#       POSTGRES_USER: ${DB_USER}
+#       POSTGRES_PASSWORD: ${DB_PASSWORD}
+#       POSTGRES_DB: ${DB_NAME}
+#     ports:
+#       - "5432:5432"
+#     volumes:
+#       - postgres_data:/var/lib/postgresql/data
+
+#   flask-boilerplate:
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     env_file:
+#       - .env
+#     environment:
+#       MIGRATION_MESSAGE: ${MIGRATION_MESSAGE}
+#     ports:
+#       - "5000:5000"
+#     depends_on:
+#       - postgres
+#     develop:
+#       watch:
+#         - action: sync
+#           path: .
+#           target: /usr/src/app
+#     command: [ "./scripts/run.sh" ]
+
+# volumes:
+#   postgres_data:

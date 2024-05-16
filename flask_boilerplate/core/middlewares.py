@@ -10,6 +10,7 @@ Description:
 """
 
 import re
+import jwt
 from http import HTTPStatus
 from logging import Logger
 
@@ -134,6 +135,15 @@ class ExceptionHandler:
         elif isinstance(err, HTTPException):
             status_code = err.code
             err_message = err.description
+
+            self.log_exception(err)
+
+        # Handle Unauthorize Expection
+        elif isinstance(
+            err, (jwt.ExpiredSignatureError, jwt.InvalidTokenError)
+        ):
+            status_code = 401
+            err_message = "Invalid Token"
 
             self.log_exception(err)
 
