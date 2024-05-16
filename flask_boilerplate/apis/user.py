@@ -278,15 +278,18 @@ class UserLogin(Resource):
 
         user_services = UserService()
         user = user_services.get_by_validate_user(user_email, user_password)
-        token = jwt.encode(
-            {
-                "sub": user.id,
-                "exp": datetime.utcnow()
-                + timedelta(seconds=TOKEN_EXPIRY_TIME),
-                "role": user.role_id,
-            },
-            PRIVATE_KEY,
-            algorithm="RS256",
-        )
-        user.token = token
-        return UserResponse.success(data=user)
+        if user:
+            token = jwt.encode(
+                {
+                    "sub": user.id,
+                    "exp": datetime.utcnow()
+                    + timedelta(seconds=TOKEN_EXPIRY_TIME),
+                    "role": user.role_id,
+                },
+                PRIVATE_KEY,
+                algorithm="RS256",
+            )
+            user.token = token
+            return UserResponse.success(data=user)
+        else:
+            return UserResponse.failure("User not found")

@@ -54,9 +54,14 @@ class UserRepository(BaseRepository):
         return super().create(entity)
 
     def get_validate_user(self, email, passowrd):
-        user = db.session.query(UserTable).filter(email == email).first()
-        is_valid_user = pbkdf2_sha256.verify(passowrd, user.password)
-        if is_valid_user:
-            return user
+        user = (
+            db.session.query(UserTable)
+            .filter(UserTable.email == email)
+            .first()
+        )
+        if user:
+            is_valid_user = pbkdf2_sha256.verify(passowrd, user.password)
+            if is_valid_user:
+                return user
 
-        raise Exception
+        return None
