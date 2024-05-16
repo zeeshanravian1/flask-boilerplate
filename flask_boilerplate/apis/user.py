@@ -288,6 +288,5 @@ class UserLogin(Resource):
             PRIVATE_KEY,
             algorithm="RS256",
         )
-        user = user.to_dict()
-        user["token"] = token
+        user.token = token
         return UserResponse.success(data=user)
