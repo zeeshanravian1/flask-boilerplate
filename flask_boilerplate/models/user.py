@@ -9,12 +9,12 @@ Description:
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from flask_boilerplate.database.base import BaseTable
+from flask_boilerplate.database.base import BaseTable, db
 
 from .role import RoleTable
 
 
-class UserTable(BaseTable):
+class UserTable(BaseTable, db.Model):
     """
     User Table
 

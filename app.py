@@ -29,6 +29,8 @@ from flask_boilerplate.core.config import (
     PROJECT_TITLE,
     PROJECT_VERSION,
     SQLALCHEMY_TRACK_MODIFICATIONS,
+    SWAGGER_AUTHORIZATIONS,
+    SWAGGER_SECURITY,
     SWAGGER_UI_DOC_EXPANSION,
 )
 from flask_boilerplate.core.logger import AppLogger
@@ -40,14 +42,6 @@ app = Flask(__name__)
 
 # Initialize ExceptionHandler instance
 ExceptionHandler(app)
-authorizations = {
-    "Authorization": {
-        "description": "Inputs: Bearer \\<jwtToken\\>",
-        "type": "apiKey",
-        "in": "header",
-        "name": "Authorization",
-    }
-}
 
 # Initialize logger instance
 logger: Logger = AppLogger().get_logger()
@@ -58,8 +52,8 @@ api = Api(
     doc=DOCS_URL,
     title=PROJECT_TITLE,
     description=PROJECT_DESCRIPTION,
-    authorizations=authorizations,
-    security="Authorization",
+    authorizations=SWAGGER_AUTHORIZATIONS,
+    security=SWAGGER_SECURITY,
     version=PROJECT_VERSION,
 )
 
@@ -121,5 +115,8 @@ class Home(Resource):
 api.add_namespace(ns_role)
 api.add_namespace(ns_user)
 
+
+# Main function to run application
 if __name__ == "__main__":
+    logger.info("Starting Flask application")
     app.run(debug=True, host="0.0.0.0", port=5000)
