@@ -25,8 +25,9 @@ from flask_boilerplate.schemas.user import (
     user_login_response,
 )
 from flask_boilerplate.services.user import UserService
-from flask_boilerplate.core.config import TOKEN_EXPIRY, PRIVATE_KEY
+from flask_boilerplate.core.config import PRIVATE_KEY
 from flask_boilerplate.decorator.authorization import auth
+from flask_boilerplate.constants.base import TOKEN_EXPIRY_TIME
 
 
 # Resource to handle listing and adding users
@@ -280,7 +281,8 @@ class UserLogin(Resource):
         token = jwt.encode(
             {
                 "sub": user.id,
-                "exp": datetime.utcnow() + timedelta(seconds=TOKEN_EXPIRY),
+                "exp": datetime.utcnow()
+                + timedelta(seconds=TOKEN_EXPIRY_TIME),
                 "role": user.role_id,
             },
             PRIVATE_KEY,

@@ -31,7 +31,6 @@ PRIVATE_KEY = PRIVATE_KEY.replace("\\n", "\n")
 PUBLIC_KEY = env.str("PUBLIC_KEY")
 PUBLIC_KEY = PUBLIC_KEY.replace("\\n", "\n")
 
-TOKEN_EXPIRY = int(env.str("TOKEN_EXPIRY_TIME"))
 # CORS
 CORS_ALLOW_ORIGINS: str = env.str("CORS_ALLOW_ORIGINS")
 CORS_ALLOW_METHODS: str = env.str("CORS_ALLOW_METHODS")

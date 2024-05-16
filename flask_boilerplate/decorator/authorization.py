@@ -17,20 +17,18 @@ def decode_jwt_token(token: str) -> Dict:
     Returns:
         Decoded dictionary
     """
-    try:
-        public_key = PUBLIC_KEY
-        if public_key:
-            decoded = jwt.decode(
-                token,
-                public_key,
-                algorithms=["RS256"],
-                options={
-                    "verify_aud": False,
-                },
-            )
-            return decoded
-    except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
-        return None
+
+    public_key = PUBLIC_KEY
+    if public_key:
+        decoded = jwt.decode(
+            token,
+            public_key,
+            algorithms=["RS256"],
+            options={
+                "verify_aud": False,
+            },
+        )
+        return decoded
 
 
 def auth(*value):
