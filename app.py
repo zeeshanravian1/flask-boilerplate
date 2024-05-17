@@ -18,6 +18,7 @@ from flask_restx import Api, Resource
 
 from flask_boilerplate.apis.role import ns_role
 from flask_boilerplate.apis.user import ns_user
+from flask_boilerplate.apis.permission import ns_permission
 from flask_boilerplate.core.config import (
     CORS_ALLOW_CREDENTIALS,
     CORS_ALLOW_HEADERS,
@@ -120,6 +121,7 @@ class Home(Resource):
 # Register namespaces
 api.add_namespace(ns_role)
 api.add_namespace(ns_user)
+api.add_namespace(ns_permission)
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)
