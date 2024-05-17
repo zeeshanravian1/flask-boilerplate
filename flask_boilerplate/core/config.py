@@ -13,6 +13,7 @@ import environs
 env = environs.Env()
 env.read_env()
 
+
 # Database
 DATABASE: str = env.str("DATABASE")
 DB_HOST: str = env.str("DB_HOST")
@@ -26,16 +27,17 @@ DATABASE_URL: str = (
 )
 
 
-PRIVATE_KEY = env.str("PRIVATE_KEY")
-PRIVATE_KEY = PRIVATE_KEY.replace("\\n", "\n")
-PUBLIC_KEY = env.str("PUBLIC_KEY")
-PUBLIC_KEY = PUBLIC_KEY.replace("\\n", "\n")
-
 # CORS
 CORS_ALLOW_ORIGINS: str = env.str("CORS_ALLOW_ORIGINS")
 CORS_ALLOW_METHODS: str = env.str("CORS_ALLOW_METHODS")
 CORS_ALLOW_HEADERS: str = env.str("CORS_ALLOW_HEADERS")
 CORS_ALLOW_CREDENTIALS: bool = env.bool("CORS_ALLOW_CREDENTIALS")
+
+
+# JWT
+PRIVATE_KEY: str = env.str("PRIVATE_KEY").replace("\\n", "\n")
+PUBLIC_KEY: str = env.str("PUBLIC_KEY").replace("\\n", "\n")
+TOKEN_EXPIRY: int = 60 * 24  # 1 day
 
 
 # Project
@@ -48,3 +50,12 @@ DOCS_URL: str = "/docs"
 
 SQLALCHEMY_TRACK_MODIFICATIONS: bool = False
 SWAGGER_UI_DOC_EXPANSION: str = "list"
+SWAGGER_SECURITY: str = "Authorization"
+SWAGGER_AUTHORIZATIONS: dict[str, dict[str, str]] = {
+    "Authorization": {
+        "description": "Inputs: Bearer \\<jwtToken\\>",
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization",
+    }
+}

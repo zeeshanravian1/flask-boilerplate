@@ -123,3 +123,14 @@ repos:
     hooks:
     - id: skjold
       verbose: true
+
+  # Analyzes Python code complexity using Radon, ensuring that the code meets a specified
+  # complexity threshold before allowing commits, promoting maintainable and readable code.
+  - repo: local
+    hooks:
+    - id: radon-check
+      name: radon-check
+      language: system
+      entry: ./scripts/radon_check.sh
+      types: [python]
+      verbose: true
