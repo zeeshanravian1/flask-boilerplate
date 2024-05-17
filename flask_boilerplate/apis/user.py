@@ -133,6 +133,7 @@ class UserResource(Resource):
 
     """
 
+    @auth()
     @ns_user.marshal_with(fields=user_read_schema, code=HTTPStatus.OK)
     def get(self, user_id):
         """
@@ -169,6 +170,7 @@ class UserResource(Resource):
 
         return UserResponse.read_response(data=user)
 
+    @auth()
     @ns_user.expect(user_update_schema, validate=True)
     @ns_user.marshal_with(fields=user_read_schema, code=HTTPStatus.ACCEPTED)
     def put(self, user_id):
@@ -220,6 +222,7 @@ class UserResource(Resource):
 
         return UserResponse.update_response(data=user)
 
+    @auth()
     @ns_user.response(
         code=HTTPStatus.NO_CONTENT, description=USER_DELETE_SUCCESS
     )
