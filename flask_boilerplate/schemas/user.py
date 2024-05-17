@@ -9,7 +9,7 @@ Description:
 from datetime import datetime, timezone
 
 from flask_restx import Model, OrderedModel
-from flask_restx.fields import Boolean, DateTime, Integer, Nested, String, List
+from flask_restx.fields import Boolean, DateTime, Integer, Nested, String
 
 from flask_boilerplate.constants.user import (
     ADDRESS,
@@ -51,7 +51,7 @@ user_base_schema: Model | OrderedModel = ns_user.model(
 )
 
 # User Create Schema
-user_create_schema = ns_user.clone(
+user_create_schema: Model = ns_user.clone(
     "UserCreateSchema",
     user_base_schema,
     {
@@ -122,29 +122,30 @@ user_update_schema: Model | OrderedModel = ns_user.inherit(
     },
 )
 
-user_login_schema = ns_user.model(
-    "UserLoginSchema",
+# Login Schema
+login_schema: Model | OrderedModel = ns_user.model(
+    "LoginSchema",
     {"email": String(required=True), "password": String(required=True)},
     strict=True,
 )
 
-user_login = ns_user.model(
-    "UserLogin",
+# Login Read Base Schema
+login_read_base_schema: Model | OrderedModel = ns_user.inherit(
+    "LoginReadBaseSchema",
+    user_read_base_schema,
     {
-        "first_name": String(),
-        "last_name": String(),
-        "username": String(),
-        "email": String(),
-        "role_id": Integer(),
-        "token": String(),
+        "access_token": String(),
+        "refresh_token": String(),
     },
 )
 
-user_login_response = ns_user.model(
-    "UserLoginResponse",
+
+# Login Read Schema
+login_read_schema: Model | OrderedModel = ns_user.model(
+    "LoginReadSchema",
     {
-        "status": String(description="ok|nok"),
-        "object": Nested(user_login, skip_none=True, allow_null=True),
-        "errors": List(String),
+        "success": Boolean(default=True),
+        "data": Nested(login_read_base_schema),
     },
+    strict=True,
 )

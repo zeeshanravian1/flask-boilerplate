@@ -167,7 +167,7 @@ class BaseResponse:
         Returns:
             - `response (dict)`: Response dict.
         """
-        response = {"status": "ok", "object": data}
+        response = {"success": True, "data": data}
 
         return response
 

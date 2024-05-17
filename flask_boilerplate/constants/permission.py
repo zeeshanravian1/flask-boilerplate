@@ -2,7 +2,8 @@
 Permission Constants
 
 Description:
-    - this module contains all permission constants.
+    - This module contains all permission constants.
+
 """
 
 PERMISSION: str = "Permission"

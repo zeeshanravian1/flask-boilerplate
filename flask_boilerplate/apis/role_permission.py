@@ -8,14 +8,14 @@ Description:
 
 from flask_restx import Resource
 
+from flask_boilerplate.decorator.authorization import auth
 from flask_boilerplate.namespaces.permission import ns_permission
+from flask_boilerplate.responses.permission import PermissionResponse
 from flask_boilerplate.schemas.permission import (
-    permission_create_expect,
+    permission_create_schema,
     permission_read_schema,
 )
-from flask_boilerplate.decorator.authorization import auth
 from flask_boilerplate.services.permission import PermissionService
-from flask_boilerplate.responses.permission import PermissionResponse
 
 
 @ns_permission.route("/")
@@ -29,7 +29,7 @@ class PermissionListResource(Resource):
     """
 
     @auth()
-    @ns_permission.expect(permission_create_expect, validate=True)
+    @ns_permission.expect(permission_create_schema, validate=True)
     @ns_permission.marshal_with(permission_read_schema, skip_none=True)
     def post(self):
         """

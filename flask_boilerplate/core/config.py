@@ -37,7 +37,8 @@ CORS_ALLOW_CREDENTIALS: bool = env.bool("CORS_ALLOW_CREDENTIALS")
 # JWT
 PRIVATE_KEY: str = env.str("PRIVATE_KEY").replace("\\n", "\n")
 PUBLIC_KEY: str = env.str("PUBLIC_KEY").replace("\\n", "\n")
-TOKEN_EXPIRY: int = 60 * 24  # 1 day
+ACCESS_TOKEN_EXPIRY_TIME: int = 60 * 24  # 1 day
+REFRESH_TOKEN_EXPIRY_TIME: int = 60 * 24 * 7  # 1 week
 
 
 # Project

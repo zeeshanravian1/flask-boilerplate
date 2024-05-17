@@ -137,7 +137,9 @@ def run_migrations_online() -> None:
     # this callback is used to prevent an auto-migration from being generated
     # when there are no changes to the schema
     # reference: http://alembic.zzzcomputing.com/en/latest/cookbook.html
-    def process_revision_directives(context, revision, directives) -> None:
+    def process_revision_directives(  # pylint: disable=W0613, W0621
+        context, revision, directives
+    ) -> None:
         if getattr(config.cmd_opts, "autogenerate", False):
             script: Any = directives[0]
             if script.upgrade_ops.is_empty():
