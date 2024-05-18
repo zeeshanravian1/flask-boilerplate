@@ -8,7 +8,7 @@ Description:
 
 from datetime import datetime, timezone
 
-CONTENT_TYPE_JSON: dict = {"Content-Type": "application/json"}
+CONTENT_TYPE_JSON: dict[str, str] = {"Content-Type": "application/json"}
 
 # Response Constants
 ID: int = 1

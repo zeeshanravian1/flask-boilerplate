@@ -21,6 +21,7 @@ COUNTRY: str = "Pakistan"
 POSTAL_CODE: str = "54000"
 ROLE_ID: int = 1
 
-USERNAME_COLUMN: str = "username"
+USER_USERNAME_COLUMN: str = "username"
+USER_EMAIL_COLUMN: str = "email"
 
 USER_DELETE_SUCCESS: str = "User deleted successfully."

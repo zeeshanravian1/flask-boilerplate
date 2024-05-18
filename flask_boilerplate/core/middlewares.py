@@ -100,6 +100,7 @@ class ExceptionHandler:
         err_message: str | None = ERROR_MESSAGES.get(
             str(HTTPStatus.INTERNAL_SERVER_ERROR)
         )
+        data: None = None
 
         # Handle Unauthorize Exception
         if isinstance(err, (ExpiredSignatureError, InvalidTokenError)):
@@ -155,6 +156,7 @@ class ExceptionHandler:
                 {
                     "success": success,
                     "message": err_message,
+                    "data": data,
                 }
             ),
             status_code,

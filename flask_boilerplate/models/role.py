@@ -9,10 +9,10 @@ Description:
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from flask_boilerplate.database.base import BaseTable, db
+from flask_boilerplate.database.base import BaseTable
 
 
-class RoleTable(BaseTable, db.Model):
+class RoleTable(BaseTable):
     """
     Role Table
 
@@ -27,4 +27,7 @@ class RoleTable(BaseTable, db.Model):
     # Relationships
     users: Mapped[list["UserTable"]] = relationship(  # noqa:F821 # type:ignore
         back_populates="role", cascade="all, delete-orphan"
+    )
+    permissions: Mapped[list["RolePermissionTable"]] = (  # noqa:F821
+        relationship(back_populates="role", cascade="all, delete-orphan")
     )

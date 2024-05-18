@@ -50,6 +50,7 @@ API_PREFIX: str = "/api/v1"
 DOCS_URL: str = "/docs"
 
 SQLALCHEMY_TRACK_MODIFICATIONS: bool = False
+
 SWAGGER_UI_DOC_EXPANSION: str = "list"
 SWAGGER_SECURITY: str = "Authorization"
 SWAGGER_AUTHORIZATIONS: dict[str, dict[str, str]] = {

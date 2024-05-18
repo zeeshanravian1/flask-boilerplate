@@ -32,7 +32,6 @@ class RolePermissionTable(BaseTable):
         ForeignKey(PermissionTable.id, ondelete="CASCADE"),
     )
 
-    role = relationship("Role", backref="role_to_role_permission")
-    permission = relationship(
-        "Permission", backref="permission_to_role_permission"
-    )
+    # Relationships
+    role: Mapped[RoleTable] = relationship(back_populates="permissions")
+    permission: Mapped[PermissionTable] = relationship(back_populates="roles")
