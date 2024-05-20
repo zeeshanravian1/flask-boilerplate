@@ -5,6 +5,7 @@ from flask import g, request
 from werkzeug.exceptions import Unauthorized
 from ..services.user import UserService
 from flask_boilerplate.core.config import PUBLIC_KEY
+from services.redis import redis
 
 
 def decode_jwt_token(token: str) -> Dict:
@@ -63,10 +64,15 @@ def auth(*value):
             decoded = decode_jwt_token(token)
             if decoded and "sub" in decoded.keys():
                 g.user = UserService().read_by_id(decoded["sub"])
+                permissions = redis.get(g.user.role.role_name)
+                if permissions:
+                    if g.permission[0] in permissions:
+                        return f(*args, **kwargs)
+
             else:
                 return Unauthorized("Invalid Token")
 
-            return f(*args, **kwargs)
+            raise Unauthorized("Invalid Token")
 
         return wrapper_function
 

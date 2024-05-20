@@ -14,9 +14,10 @@ from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_restx import Api, Resource
 
-from flask_boilerplate.apis.permission import ns_permission
 from flask_boilerplate.apis.role import ns_role
 from flask_boilerplate.apis.user import ns_user
+from flask_boilerplate.apis.permission import ns_permission
+from flask_boilerplate.apis.role_permission import ns_role_permission
 from flask_boilerplate.core.config import (
     CORS_ALLOW_CREDENTIALS,
     CORS_ALLOW_HEADERS,
@@ -110,6 +111,7 @@ class Home(Resource):
 api.add_namespace(ns_role)
 api.add_namespace(ns_user)
 api.add_namespace(ns_permission)
+api.add_namespace(ns_role_permission)
 
 
 # Main function to run application

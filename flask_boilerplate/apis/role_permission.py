@@ -8,76 +8,81 @@ Description:
 
 from flask_restx import Resource
 
+from flask_boilerplate.namespaces.role_permission import ns_role_permission
 from flask_boilerplate.decorator.authorization import auth
-from flask_boilerplate.namespaces.permission import ns_permission
-from flask_boilerplate.responses.permission import PermissionResponse
-from flask_boilerplate.schemas.permission import (
-    permission_create_schema,
-    permission_read_schema,
+from flask_boilerplate.schemas.role_permission import (
+    role_permission_patch_expect,
+    role_permission_patch_response,
 )
-from flask_boilerplate.services.permission import PermissionService
+from flask_boilerplate.services.role_permission import RolePermissionService
+from flask_boilerplate.responses.role_permission import RolePermissionResponse
+from constants.permissions import RolePermissions
 
 
-@ns_permission.route("/")
-class PermissionListResource(Resource):
+@ns_role_permission.route("/")
+class RolePermissionPatchResource(Resource):
     """
-    Permission List Resource
+    Role Permission update Resource
 
     Description:
-        - This class is used to handle listing and adding permission.
+        - This class is used to handle updation of role_permission.
 
     """
 
-    @auth()
-    @ns_permission.expect(permission_create_schema, validate=True)
-    @ns_permission.marshal_with(permission_read_schema, skip_none=True)
+    # @auth()
+    @ns_role_permission.expect(role_permission_patch_expect, validate=True)
+    @ns_role_permission.marshal_with(role_permission_patch_response)
     def post(self):
         """
-        Add Permission
+        Add Role_Permission
 
         Description:
-            - This function is used to add a new permission.
+            - This function is used to add a new permission against a role.
 
         Args:
-        Permission details to be created with following fields:
-            - `permission_name (str)`: Name of permission. **(Required)**
-            - `permission_description (str)`: Description of permission. **(Optional)**
+            - `role_id (int)`: Id of role. **(Required)**
+            - `permission_id (int)`: Id of permission. **(Optional)**
 
         Returns:
-        Permission details along with following information:
+        Role and Permission details along with following information:
             - `id (int)`: ID of permission.
-            - `permission_name (str)`: Name of permission.
-            - `permission_description (str)`: Description of permission.
             - `created_at (str)`: Datetime of role creation.
             - `updated_at (str)`: Datetime of role update.
 
         """
 
-        permission = PermissionService().create(entity=ns_permission.payload)
+        role_permission = RolePermissionService().create_record(
+            role_id=ns_role_permission.payload["role_id"],
+            permission_id=ns_role_permission.payload["permission_id"],
+        )
+        if not role_permission:
+            return RolePermissionResponse.failure(
+                "Permission already exist against this role"
+            )
 
-        return PermissionResponse.create_response(data=permission)
+        return RolePermissionResponse.success(data=role_permission)
 
-    @auth()
-    @ns_permission.marshal_with(permission_read_schema, skip_none=True)
-    def get(self):
+
+@ns_role_permission.route("/<int:role_id>")
+class RolePermissionListResource(Resource):
+    @auth(RolePermissions.Create_Role.value)
+    @ns_role_permission.marshal_with(role_permission_patch_response)
+    def get(self, role_id):
         """
-        Get all Permissions
+        List Role_Permission
 
         Description:
-            - This function is used to get all permissions.
+            - This function is used to list permissions against a role.
 
         Args:
-            - `None`
+            - `role_id (int)`: Id of role. **(Required)**
 
         Returns:
-        Get all permissions with following information:
+        Role and Permission details along with following information:
             - `id (int)`: ID of permission.
-            - `permission_name (str)`: Name of permission.
-            - `permission_description (str)`: Description of permission.
-            - `created_at (str)`: Datetime of permission creation.
-            - `updated_at (str)`: Datetime of permission update.
-
+            - `created_at (str)`: Datetime of role creation.
+            - `updated_at (str)`: Datetime of role update.
         """
+        role_permissions = RolePermissionService().get_role_permission(role_id)
 
-        permissions = PermissionService().read_all()
-        return PermissionResponse.read_all_response(data=permissions)
+        return RolePermissionResponse.success(data=role_permissions)

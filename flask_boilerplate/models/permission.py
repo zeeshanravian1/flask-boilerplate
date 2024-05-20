@@ -9,10 +9,10 @@ Description:
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from flask_boilerplate.database.base import BaseTable
+from flask_boilerplate.database.base import BaseTable, db
 
 
-class PermissionTable(BaseTable):
+class PermissionTable(BaseTable, db.Model):
     """
     Permission Table
 

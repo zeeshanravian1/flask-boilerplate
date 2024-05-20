@@ -13,7 +13,7 @@ import environs
 env = environs.Env()
 env.read_env()
 
-
+ENVIRONMENT: str = env.str("ENV")
 # Database
 DATABASE: str = env.str("DATABASE")
 DB_HOST: str = env.str("DB_HOST")
@@ -61,3 +61,6 @@ SWAGGER_AUTHORIZATIONS: dict[str, dict[str, str]] = {
         "name": "Authorization",
     }
 }
+
+REDIS_PORT: int = env.str("REDIS_PORT")
+REDIS_HOST: str = env.str("REDIS_HOST")

@@ -6,15 +6,15 @@ Description:
 
 """
 
-from sqlalchemy import ForeignKey, Integer
+from sqlalchemy import Integer, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from flask_boilerplate.database.base import BaseTable
-from flask_boilerplate.models.permission import PermissionTable
+from flask_boilerplate.database.base import BaseTable, db
 from flask_boilerplate.models.role import RoleTable
+from flask_boilerplate.models.permission import PermissionTable
 
 
-class RolePermissionTable(BaseTable):
+class RolePermissionTable(BaseTable, db.Model):
     """
     Role Permission Table
 
@@ -26,12 +26,17 @@ class RolePermissionTable(BaseTable):
     role_id: Mapped[int] = mapped_column(
         Integer,
         ForeignKey(RoleTable.id, ondelete="CASCADE"),
+        nullable=False,
+        unique=False,
     )
     permission_id: Mapped[int] = mapped_column(
         Integer,
         ForeignKey(PermissionTable.id, ondelete="CASCADE"),
+        nullable=False,
+        unique=False,
     )
 
-    # Relationships
-    role: Mapped[RoleTable] = relationship(back_populates="permissions")
-    permission: Mapped[PermissionTable] = relationship(back_populates="roles")
+    role = relationship("RoleTable", backref="role_to_role_permission")
+    permission = relationship(
+        "PermissionTable", backref="permission_to_role_permission"
+    )
