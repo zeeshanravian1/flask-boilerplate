@@ -6,31 +6,33 @@ Description:
 
 """
 
-import jwt
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from http import HTTPStatus
 
+import jwt
 from flask import request
 from flask_restx import Resource
 
+from flask_boilerplate.core.config import (
+    ACCESS_TOKEN_EXPIRY_TIME,
+    REFRESH_TOKEN_EXPIRY_TIME,
+)
 from flask_boilerplate.constants.user import USER, USER_DELETE_SUCCESS
+from flask_boilerplate.core.config import PRIVATE_KEY
+from flask_boilerplate.decorator.authorization import auth
 from flask_boilerplate.namespaces.user import ns_user
 from flask_boilerplate.responses.user import UserResponse
 from flask_boilerplate.schemas.user import (
+    login_read_schema,
+    login_schema,
     user_create_schema,
     user_read_all_schema,
     user_read_schema,
     user_update_schema,
-    user_login_schema,
-    user_login_response,
 )
 from flask_boilerplate.services.user import UserService
-from flask_boilerplate.core.config import PRIVATE_KEY
-from flask_boilerplate.decorator.authorization import auth
-from flask_boilerplate.constants.base import TOKEN_EXPIRY_TIME
 
 
-# Resource to handle listing and adding users
 @ns_user.route("/")
 class UserListResource(Resource):
     """
@@ -259,8 +261,8 @@ class UserLogin(Resource):
 
     """
 
-    @ns_user.expect(user_login_schema, validate=True)
-    @ns_user.marshal_with(fields=user_login_response, code=HTTPStatus.OK)
+    @ns_user.expect(login_schema, validate=True)
+    @ns_user.marshal_with(fields=login_read_schema, code=HTTPStatus.OK)
     def post(self):
         """
         Login User
@@ -282,17 +284,29 @@ class UserLogin(Resource):
         user_services = UserService()
         user = user_services.get_by_validate_user(user_email, user_password)
         if user:
-            token = jwt.encode(
+            access_token = jwt.encode(
                 {
                     "sub": user.id,
-                    "exp": datetime.utcnow()
-                    + timedelta(seconds=TOKEN_EXPIRY_TIME),
+                    "exp": datetime.now(tz=timezone.utc)
+                    + timedelta(seconds=ACCESS_TOKEN_EXPIRY_TIME),
                     "role": user.role_id,
                 },
                 PRIVATE_KEY,
                 algorithm="RS256",
             )
-            user.token = token
+            user.access_token = access_token
+
+            refresh_token = jwt.encode(
+                {
+                    "sub": user.id,
+                    "exp": datetime.now(tz=timezone.utc)
+                    + timedelta(seconds=REFRESH_TOKEN_EXPIRY_TIME),
+                    "role": user.role_id,
+                },
+                PRIVATE_KEY,
+                algorithm="RS256",
+            )
+            user.refresh_token = refresh_token
             return UserResponse.success(data=user)
         else:
             return UserResponse.failure("User not found")

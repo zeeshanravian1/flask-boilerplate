@@ -8,4 +8,4 @@ Description:
 
 from flask_restx import Namespace
 
-ns_user = Namespace(name="User", description="User operations", path="/user")
+ns_user = Namespace(name="User", description="User Operations", path="/user")

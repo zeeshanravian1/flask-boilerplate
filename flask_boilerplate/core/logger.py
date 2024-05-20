@@ -7,7 +7,7 @@ Description:
 
 """
 
-import logging
+from logging import DEBUG, FileHandler, Formatter, Logger, getLogger
 from pathlib import Path
 from typing import Self
 
@@ -21,7 +21,7 @@ class AppLogger:
     """
 
     _instance: Self | None = None
-    logger: logging.Logger
+    logger: Logger
 
     def __new__(cls) -> Self:
         """
@@ -44,18 +44,18 @@ class AppLogger:
             cls._instance = super().__new__(cls)
 
             # Initialize the logger
-            cls._instance.logger = logging.getLogger(__name__)
-            cls._instance.logger.setLevel(logging.DEBUG)
+            cls._instance.logger = getLogger(__name__)
+            cls._instance.logger.setLevel(DEBUG)
 
             # Ensure the logs directory exists
             Path("logs").mkdir(parents=True, exist_ok=True)
 
             # Create handlers
-            handler = logging.FileHandler("logs/app.log")
-            handler.setLevel(logging.DEBUG)
+            handler = FileHandler("logs/app.log")
+            handler.setLevel(DEBUG)
 
             # Create formatters and add them to handlers
-            formatter = logging.Formatter(
+            formatter = Formatter(
                 "%(asctime)s - %(filename)s:%(lineno)d - "
                 "%(levelname)s - %(message)s"
             )
@@ -67,7 +67,7 @@ class AppLogger:
 
         return cls._instance  # type: ignore
 
-    def get_logger(self) -> logging.Logger:
+    def get_logger(self) -> Logger:
         """
         Get the logger instance
 

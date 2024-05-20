@@ -10,6 +10,6 @@ from flask_restx import Namespace
 
 ns_role_permission = Namespace(
     name="Role Permission",
-    description="Role Permission operations",
-    path="/role_permission",
+    description="Role Permission Operations",
+    path="/role-permissions",
 )

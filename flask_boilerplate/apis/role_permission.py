@@ -30,9 +30,7 @@ class RolePermissionPatchResource(Resource):
 
     # @auth()
     @ns_role_permission.expect(role_permission_patch_expect, validate=True)
-    @ns_role_permission.marshal_with(
-        role_permission_patch_response, skip_none=True
-    )
+    @ns_role_permission.marshal_with(role_permission_patch_response)
     def post(self):
         """
         Update Role_Permission
@@ -68,7 +66,6 @@ class RolePermissionPatchResource(Resource):
 class RolePermissionListResource(Resource):
     @auth("Create Role")
     @ns_role_permission.marshal_with(role_permission_patch_response)
-    @ns_role_permission.doc("Testing swagger")
     def get(self, role_id):
         """
         Lis Role_Permission

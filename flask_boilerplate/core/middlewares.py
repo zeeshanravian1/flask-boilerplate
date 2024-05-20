@@ -10,11 +10,11 @@ Description:
 """
 
 import re
-import jwt
 from http import HTTPStatus
 from logging import Logger
 
 from flask import Flask, jsonify
+from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
 from psycopg2.errors import (  # pylint: disable=E0611
     ForeignKeyViolation,
     NotNullViolation,
@@ -100,12 +100,20 @@ class ExceptionHandler:
         err_message: str | None = ERROR_MESSAGES.get(
             str(HTTPStatus.INTERNAL_SERVER_ERROR)
         )
+        data: None = None
 
-        # Handle IntegrityError
-        if isinstance(err, IntegrityError):
+        # Handle Unauthorize Exception
+        if isinstance(err, (ExpiredSignatureError, InvalidTokenError)):
+            status_code = HTTPStatus.UNAUTHORIZED
+            err_message = ERROR_MESSAGES.get(str(HTTPStatus.UNAUTHORIZED))
+
+            self.log_exception(err)
+
+        # Handle Integrity Exception
+        elif isinstance(err, IntegrityError):
             status_code = HTTPStatus.CONFLICT
 
-            # Hanlde NotNullViolation
+            # Hanlde NotNullViolation Exception
             if isinstance(err.orig, NotNullViolation):
                 match: re.Match[str] | None = re.search(
                     pattern=r'"([^"]+)"', string=str(err.orig)
@@ -113,7 +121,7 @@ class ExceptionHandler:
                 if match:
                     err_message = f"{match.group(1)} can't be null"
 
-            # Handle ForeignKeyViolation and UniqueViolation
+            # Handle ForeignKeyViolation and UniqueViolation Exception
             elif isinstance(err.orig, (ForeignKeyViolation, UniqueViolation)):
                 err_message = (
                     str(err.orig)
@@ -127,7 +135,7 @@ class ExceptionHandler:
                     pattern=r"in table.*", repl="", string=err_message
                 ).strip()
 
-            # Handle other IntegrityError
+            # Handle other IntegrityError Exception
             else:
                 err_message = ERROR_MESSAGES.get(str(HTTPStatus.CONFLICT))
 
@@ -138,16 +146,7 @@ class ExceptionHandler:
 
             self.log_exception(err)
 
-        # Handle Unauthorize Expection
-        elif isinstance(
-            err, (jwt.ExpiredSignatureError, jwt.InvalidTokenError)
-        ):
-            status_code = 401
-            err_message = "Invalid Token"
-
-            self.log_exception(err)
-
-        # Handle other exceptions
+        # Handle other Exceptions
         else:
             self.log_exception(err)
 
@@ -157,6 +156,7 @@ class ExceptionHandler:
                 {
                     "success": success,
                     "message": err_message,
+                    "data": data,
                 }
             ),
             status_code,

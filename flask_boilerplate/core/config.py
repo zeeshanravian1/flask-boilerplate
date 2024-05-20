@@ -37,7 +37,8 @@ CORS_ALLOW_CREDENTIALS: bool = env.bool("CORS_ALLOW_CREDENTIALS")
 # JWT
 PRIVATE_KEY: str = env.str("PRIVATE_KEY").replace("\\n", "\n")
 PUBLIC_KEY: str = env.str("PUBLIC_KEY").replace("\\n", "\n")
-TOKEN_EXPIRY: int = 60 * 24  # 1 day
+ACCESS_TOKEN_EXPIRY_TIME: int = 60 * 24  # 1 day
+REFRESH_TOKEN_EXPIRY_TIME: int = 60 * 24 * 7  # 1 week
 
 
 # Project
@@ -49,6 +50,7 @@ API_PREFIX: str = "/api/v1"
 DOCS_URL: str = "/docs"
 
 SQLALCHEMY_TRACK_MODIFICATIONS: bool = False
+
 SWAGGER_UI_DOC_EXPANSION: str = "list"
 SWAGGER_SECURITY: str = "Authorization"
 SWAGGER_AUTHORIZATIONS: dict[str, dict[str, str]] = {

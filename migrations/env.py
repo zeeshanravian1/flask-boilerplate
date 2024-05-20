@@ -8,11 +8,13 @@ Description:
 
 import logging
 from logging.config import fileConfig
-from typing import Any
 
 from alembic import context
 from alembic.config import Config
+from alembic.operations.ops import MigrationScript
 from flask import current_app
+from sqlalchemy import MetaData
+from sqlalchemy.engine.base import Engine
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -24,7 +26,7 @@ fileConfig(config.config_file_name)  # type: ignore
 logger: logging.Logger = logging.getLogger("alembic.env")
 
 
-def get_engine() -> Any:
+def get_engine() -> Engine:
     """
     Get the engine from the current app.
 
@@ -35,7 +37,7 @@ def get_engine() -> Any:
         - `None`
 
     Returns:
-        - `Any`: Engine object from the current app.
+        - `engine (Engine)`: Engine from the current app.
 
     """
 
@@ -47,7 +49,7 @@ def get_engine() -> Any:
         return current_app.extensions["migrate"].db.engine
 
 
-def get_engine_url() -> Any | str:
+def get_engine_url() -> str:
     """
     Get the engine URL from the current app.
 
@@ -58,7 +60,7 @@ def get_engine_url() -> Any | str:
         - `None`
 
     Returns:
-        - `Any | str`: Engine URL from the current app.
+        - `engine_url (str)`: Engine URL from the current app.
 
     """
 
@@ -85,7 +87,7 @@ target_db = current_app.extensions["migrate"].db
 # ... etc.
 
 
-def get_metadata():
+def get_metadata() -> MetaData:
     """
     Get the metadata from the target database.
 
@@ -137,18 +139,20 @@ def run_migrations_online() -> None:
     # this callback is used to prevent an auto-migration from being generated
     # when there are no changes to the schema
     # reference: http://alembic.zzzcomputing.com/en/latest/cookbook.html
-    def process_revision_directives(context, revision, directives) -> None:
+    def process_revision_directives(  # pylint: disable=W0613, W0621
+        context, revision, directives
+    ) -> None:
         if getattr(config.cmd_opts, "autogenerate", False):
-            script: Any = directives[0]
-            if script.upgrade_ops.is_empty():
+            script: MigrationScript = directives[0]
+            if script.upgrade_ops and script.upgrade_ops.is_empty():
                 directives[:] = []
                 logger.info("No changes in schema detected.")
 
-    conf_args: Any = current_app.extensions["migrate"].configure_args
+    conf_args: dict = current_app.extensions["migrate"].configure_args
     if conf_args.get("process_revision_directives") is None:
         conf_args["process_revision_directives"] = process_revision_directives
 
-    connectable: Any = get_engine()
+    connectable: Engine = get_engine()
 
     with connectable.connect() as connection:
         context.configure(  # pylint: disable=E1101

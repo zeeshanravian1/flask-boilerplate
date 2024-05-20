@@ -9,8 +9,6 @@ Description:
 
 """
 
-from logging import Logger
-
 from flask import Flask
 from flask_cors import CORS
 from flask_migrate import Migrate
@@ -35,7 +33,6 @@ from flask_boilerplate.core.config import (
     SWAGGER_SECURITY,
     SWAGGER_UI_DOC_EXPANSION,
 )
-from flask_boilerplate.core.logger import AppLogger
 from flask_boilerplate.core.middlewares import ExceptionHandler
 from flask_boilerplate.database.base import db
 
@@ -45,12 +42,9 @@ app = Flask(__name__)
 # Initialize ExceptionHandler instance
 ExceptionHandler(app)
 
-# Initialize logger instance
-logger: Logger = AppLogger().get_logger()
-
 # Initialize RestX API instance
 api = Api(
-    app,
+    app=app,
     doc=DOCS_URL,
     title=PROJECT_TITLE,
     description=PROJECT_DESCRIPTION,
@@ -122,5 +116,4 @@ api.add_namespace(ns_role_permission)
 
 # Main function to run application
 if __name__ == "__main__":
-    logger.info("Starting Flask application")
     app.run(debug=True, host="0.0.0.0", port=5000)

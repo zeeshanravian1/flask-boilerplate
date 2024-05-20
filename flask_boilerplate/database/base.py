@@ -47,7 +47,10 @@ class BaseTable(DeclarativeBase):
     @declared_attr.directive
     def __tablename__(self) -> str:
         """
-        Generate table name automatically.
+        Generate table name.
+
+        Description:
+            - This method generates table name automatically.
 
         """
 
@@ -57,6 +60,9 @@ class BaseTable(DeclarativeBase):
     def to_dict(self) -> dict:
         """
         Convert to dictionary.
+
+        Description:
+            - This method is used to convert the object to dictionary.
 
         """
 

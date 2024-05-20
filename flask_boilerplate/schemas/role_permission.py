@@ -47,10 +47,8 @@ role_permission_patch: Model | OrderedModel = ns_role_permission.model(
 role_permission_patch_response = ns_role_permission.model(
     "UserLoginResponse",
     {
-        "status": String(description="ok|nok"),
-        "object": Nested(
-            role_permission_patch, skip_none=True, allow_null=True
-        ),
+        "success": String(),
+        "data": Nested(role_permission_patch, skip_none=True, allow_null=True),
         "errors": List(String),
     },
 )

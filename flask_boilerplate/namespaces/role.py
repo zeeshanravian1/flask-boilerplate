@@ -8,4 +8,4 @@ Description:
 
 from flask_restx import Namespace
 
-ns_role = Namespace(name="Role", description="Role operations", path="/role")
+ns_role = Namespace(name="Role", description="Role Operations", path="/role")
