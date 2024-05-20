@@ -29,7 +29,7 @@ class RolePermissionPatchResource(Resource):
 
     """
 
-    # @auth()
+    @auth()
     @ns_role_permission.expect(role_permission_patch_expect, validate=True)
     @ns_role_permission.marshal_with(role_permission_patch_response)
     def post(self):
