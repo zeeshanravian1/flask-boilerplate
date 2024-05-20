@@ -3,9 +3,9 @@ from typing import Dict
 import jwt
 from flask import g, request
 from werkzeug.exceptions import Unauthorized
-from ..services.user import UserService
+from flask_boilerplate.services.user import UserService
 from flask_boilerplate.core.config import PUBLIC_KEY
-from services.redis import redis
+from flask_boilerplate.services.redis import redis
 from functools import wraps as functools_wraps
 
 

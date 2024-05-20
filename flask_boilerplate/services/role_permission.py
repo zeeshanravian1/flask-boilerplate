@@ -10,8 +10,8 @@ from flask_boilerplate.repositories.role_permission import (
     RolePermissionRepository,
 )
 
-from .base import BaseService
-from services.redis import redis
+from flask_boilerplate.services.base import BaseService
+from flask_boilerplate.services.redis import redis
 
 
 class RolePermissionService(BaseService):

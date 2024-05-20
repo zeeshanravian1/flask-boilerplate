@@ -21,8 +21,8 @@ from flask_boilerplate.schemas.role import (
     role_update_schema,
 )
 from flask_boilerplate.services.role import RoleService
-from constants.permissions import RolePermissions
-from decorator.authorization import auth
+from flask_boilerplate.constants.permissions import RolePermissions
+from flask_boilerplate.decorator.authorization import auth
 
 
 # Resource to handle listing and adding roles

@@ -24,3 +24,10 @@ class RolePermissions(Enum):
     GET_ROLE = "Get Role"
     UPDATE_ROLE = "Update Role"
     DELETE_ROLE = "Delete Role"
+
+
+class PermissionPermissions(Enum):
+    CREATE_PERMISSION = "Create Permission"
+    GET_ALL_PERMISSION = "Get All Permission"
+    GET_PERMISSION = "Get Permisison"
+    UPDATE_PERMISSION = "Update Permission"

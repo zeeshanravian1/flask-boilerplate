@@ -16,7 +16,7 @@ from flask_boilerplate.schemas.role_permission import (
 )
 from flask_boilerplate.services.role_permission import RolePermissionService
 from flask_boilerplate.responses.role_permission import RolePermissionResponse
-from constants.permissions import RolePermissions
+from flask_boilerplate.constants.permissions import RolePermissions
 
 
 @ns_role_permission.route("/")
