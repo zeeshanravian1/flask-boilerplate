@@ -6,13 +6,15 @@ Description:
 
 """
 
-from flask_boilerplate.models.role_permission import RolePermissionTable
+from sqlalchemy.orm.query import Query
+
 from flask_boilerplate.models.role import RoleTable
+from flask_boilerplate.models.role_permission import RolePermissionTable
 
 from .base import BaseRepository, db
 
 
-class RolePermissionRepository(BaseRepository):
+class RolePermissionRepository(BaseRepository[RolePermissionTable]):
     """
     Role Permission Repository
 
@@ -32,23 +34,35 @@ class RolePermissionRepository(BaseRepository):
 
         super().__init__(RolePermissionTable)
 
-    def create_role_permission(self, role_id, permission_id):
+    def create_role_permission(
+        self, role_id, permission_id
+    ) -> RolePermissionTable | None:
         """
         Add Permission against a role
 
         Description:
-            - this is used to add permissions against the role
+            - This is used to add permissions against the role.
+
+        Args:
+            - `role_id (int)`: Role ID. **(Required)**
+            - `permission_id (int)`: Permission ID. **(Required)**
+
+        Returns:
+            - `row (RolePermissionTable)`: Role Permission object.
 
         """
 
-        role_permission = db.session.query(RolePermissionTable).filter(
-            RolePermissionTable.role_id == role_id,
-            RolePermissionTable.permission_id == permission_id,
+        role_permission: Query[RolePermissionTable] = db.session.query(
+            self.model
+        ).filter(
+            self.model.role_id == role_id,
+            self.model.permission_id == permission_id,
         )
+
         if role_permission.count():
             return None
 
-        row = super().create(
+        row: RolePermissionTable = super().create(
             {"role_id": role_id, "permission_id": permission_id}
         )
         return row

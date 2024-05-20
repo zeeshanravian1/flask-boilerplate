@@ -8,33 +8,33 @@ Description:
 
 from passlib.hash import pbkdf2_sha256
 
-from flask_boilerplate.models.user import UserTable
 from flask_boilerplate.database.base import db
+from flask_boilerplate.models.user import UserTable
 
 from .base import BaseRepository
 
 
-class UserRepository(BaseRepository):
+class UserRepository(BaseRepository[UserTable]):
     """
-    User Repository
+    Role Repository
 
     Description:
-        - This is used to interact with user table.
+        - This is used to interact with role table.
 
     """
 
     def __init__(self) -> None:
         """
-        User Repository Constructor
+        Role Repository Constructor
 
         Description:
-            - This is used to initialize user repository.
+            - This is used to initialize role repository.
 
         """
 
         super().__init__(UserTable)
 
-    def create(self, entity):
+    def create(self, entity) -> UserTable:
         """
         Create Entity
 
@@ -53,14 +53,14 @@ class UserRepository(BaseRepository):
 
         return super().create(entity)
 
-    def get_validate_user(self, email, passowrd):
-        user = (
+    def get_validate_user(self, email, passowrd) -> UserTable | None:
+        user: UserTable | None = (
             db.session.query(UserTable)
             .filter(UserTable.email == email)
             .first()
         )
         if user:
-            is_valid_user = pbkdf2_sha256.verify(passowrd, user.password)
+            is_valid_user: bool = pbkdf2_sha256.verify(passowrd, user.password)
             if is_valid_user:
                 return user
 

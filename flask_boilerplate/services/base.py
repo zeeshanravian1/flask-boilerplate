@@ -8,6 +8,8 @@ Description:
 
 from typing import Any
 
+from flask_boilerplate.repositories.base import BaseRepository
+
 
 class BaseService:
     """
@@ -36,7 +38,7 @@ class BaseService:
 
         """
 
-        self.repository: Any = repository()
+        self.repository: BaseRepository = repository()
 
     def create(self, entity) -> Any:
         """
@@ -88,8 +90,8 @@ class BaseService:
 
         """
 
-        return self.repository.read_by_name(
-            entity_column=entity_column, entity_name=entity_name
+        return self.repository.read_by_column(
+            entity_column=entity_column, entity_value=entity_name
         )
 
     def read_all(self) -> Any:

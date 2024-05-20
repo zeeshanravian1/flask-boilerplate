@@ -1,8 +1,8 @@
 """
-Role Repository
+Permission Repository
 
 Description:
-    - This module contains role repository.
+    - This module contains permission repository.
 
 """
 
@@ -11,21 +11,21 @@ from flask_boilerplate.models.permission import PermissionTable
 from .base import BaseRepository
 
 
-class PermissionRepository(BaseRepository):
+class PermissionRepository(BaseRepository[PermissionTable]):
     """
-    Role Repository
+    Permission Repository
 
     Description:
-        - This is used to interact with role table.
+        - This is used to interact with permission table.
 
     """
 
     def __init__(self) -> None:
         """
-        Role Repository Constructor
+        Permission Repository Constructor
 
         Description:
-            - This is used to initialize role repository.
+            - This is used to initialize permission repository.
 
         """
 

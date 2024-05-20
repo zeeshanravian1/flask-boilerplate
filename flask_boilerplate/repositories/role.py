@@ -11,7 +11,7 @@ from flask_boilerplate.models.role import RoleTable
 from .base import BaseRepository
 
 
-class RoleRepository(BaseRepository):
+class RoleRepository(BaseRepository[RoleTable]):
     """
     Role Repository
 

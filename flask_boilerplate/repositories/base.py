@@ -6,12 +6,14 @@ Description:
 
 """
 
-from typing import Any, Sequence
+from typing import Generic, Type, TypeVar
 
-from flask_boilerplate.database.base import db
+from flask_boilerplate.database.base import BaseTable, db
+
+Model = TypeVar("Model", bound=BaseTable)
 
 
-class BaseRepository:
+class BaseRepository(Generic[Model]):
     """
     Base Repository
 
@@ -23,7 +25,7 @@ class BaseRepository:
 
     """
 
-    def __init__(self, model) -> None:
+    def __init__(self, model: Type[Model]) -> None:
         """
         Base Repository Constructor
 
@@ -38,9 +40,9 @@ class BaseRepository:
 
         """
 
-        self.model: Any = model
+        self.model: type[Model] = model
 
-    def create(self, entity):
+    def create(self, entity) -> Model:
         """
         Create Entity
 
@@ -55,15 +57,41 @@ class BaseRepository:
 
         """
 
-        db_instance = self.model(**entity)
+        db_instance: Model = self.model(**entity)
 
-        db.session.add(db_instance)
+        db.session.add(instance=db_instance)
         db.session.commit()
-        db.session.refresh(db_instance)
+        db.session.refresh(instance=db_instance)
 
         return db_instance
 
-    def read_by_id(self, entity_id) -> Any | None:
+    def create_multiple(self, entities) -> list[Model]:
+        """
+        Create Multiple Entities
+
+        Description:
+            - This is used to create multiple entities.
+
+        Args:
+            - `entities (List[self.model])`: List of entity objects.
+            **(Required)**
+
+        Returns:
+            - `entities (List[Model])`: List of entity objects.
+
+        """
+
+        db_instances: list[Model] = [
+            self.model(**entity) for entity in entities
+        ]
+
+        db.session.add_all(instances=db_instances)
+        db.session.commit()
+        db.session.refresh(instance=db_instances)
+
+        return db_instances
+
+    def read_by_id(self, entity_id) -> Model | None:
         """
         Read Entity by ID
 
@@ -78,18 +106,18 @@ class BaseRepository:
 
         """
 
-        return db.session.query(self.model).get(ident=entity_id)
+        return db.session.get(entity=self.model, ident=entity_id)
 
-    def read_by_name(self, entity_column, entity_name) -> Any | None:
+    def read_by_column(self, entity_column, entity_value) -> Model | None:
         """
-        Read Entity by Name
+        Read Entity by Column
 
         Description:
-            - This is used to read entity by name.
+            - This is used to read entity by column.
 
         Args:
             - `entity_column` (str): Entity column. **(Required)**
-            - `entity_name` (str): Entity name. **(Required)**
+            - `entity_value` (str): Entity value. **(Required)**
 
         Returns:
             - `entity` (Model): Entity object.
@@ -98,11 +126,11 @@ class BaseRepository:
 
         return (
             db.session.query(self.model)
-            .filter_by(**{entity_column: entity_name})
+            .filter_by(**{entity_column: entity_value})
             .first()
         )
 
-    def read_all(self) -> Sequence[Any]:
+    def read_all(self) -> list[Model]:
         """
         Read All Entities
 
@@ -120,7 +148,7 @@ class BaseRepository:
 
         return db.session.query(self.model).all()
 
-    def update(self, entity_id, entity) -> Any | bool:
+    def update(self, entity_id, entity) -> Model | bool:
         """
         Update Entity
 
@@ -136,7 +164,7 @@ class BaseRepository:
 
         """
 
-        db_instance = self.read_by_id(entity_id)
+        db_instance: Model | None = self.read_by_id(entity_id=entity_id)
 
         if not db_instance:
             return False
@@ -145,7 +173,7 @@ class BaseRepository:
             setattr(db_instance, key, value)
 
         db.session.commit()
-        db.session.refresh(db_instance)
+        db.session.refresh(instance=db_instance)
 
         return db_instance
 
@@ -164,12 +192,12 @@ class BaseRepository:
 
         """
 
-        db_instance = db.session.query(self.model).get(ident=entity_id)
+        db_instance: Model | None = self.read_by_id(entity_id=entity_id)
 
         if not db_instance:
             return False
 
-        db.session.delete(db_instance)
+        db.session.delete(instance=db_instance)
         db.session.commit()
 
         return True
