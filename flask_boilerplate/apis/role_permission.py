@@ -16,6 +16,7 @@ from flask_boilerplate.schemas.role_permission import (
 )
 from flask_boilerplate.services.role_permission import RolePermissionService
 from flask_boilerplate.responses.role_permission import RolePermissionResponse
+from constants.permissions import RolePermissions
 
 
 @ns_role_permission.route("/")
@@ -33,7 +34,7 @@ class RolePermissionPatchResource(Resource):
     @ns_role_permission.marshal_with(role_permission_patch_response)
     def post(self):
         """
-        Update Role_Permission
+        Add Role_Permission
 
         Description:
             - This function is used to add a new permission against a role.
@@ -64,11 +65,11 @@ class RolePermissionPatchResource(Resource):
 
 @ns_role_permission.route("/<int:role_id>")
 class RolePermissionListResource(Resource):
-    @auth("Create Role")
+    @auth(RolePermissions.Create_Role.value)
     @ns_role_permission.marshal_with(role_permission_patch_response)
     def get(self, role_id):
         """
-        Lis Role_Permission
+        List Role_Permission
 
         Description:
             - This function is used to list permissions against a role.
