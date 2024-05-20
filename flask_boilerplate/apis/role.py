@@ -21,6 +21,8 @@ from flask_boilerplate.schemas.role import (
     role_update_schema,
 )
 from flask_boilerplate.services.role import RoleService
+from constants.permissions import RolePermissions
+from decorator.authorization import auth
 
 
 # Resource to handle listing and adding roles
@@ -34,6 +36,7 @@ class RoleListResource(Resource):
 
     """
 
+    @auth(RolePermissions.Create_Role.value)
     @ns_role.expect(role_create_schema, validate=True)
     @ns_role.marshal_with(fields=role_read_schema, code=HTTPStatus.CREATED)
     def post(self):
@@ -62,6 +65,7 @@ class RoleListResource(Resource):
 
         return RoleResponse.create_response(data=role)
 
+    @auth(RolePermissions.GET_ALL_ROLE.value)
     @ns_role.marshal_with(fields=role_read_all_schema, code=HTTPStatus.OK)
     def get(self):
         """
@@ -100,6 +104,7 @@ class RoleResource(Resource):
 
     """
 
+    @auth(RolePermissions.GET_ROLE.value)
     @ns_role.marshal_with(fields=role_read_schema, code=HTTPStatus.OK)
     def get(self, role_id):
         """
@@ -128,6 +133,7 @@ class RoleResource(Resource):
 
         return RoleResponse.read_response(data=role)
 
+    @auth(RolePermissions.UPDATE_ROLE.value)
     @ns_role.expect(role_update_schema, validate=True)
     @ns_role.marshal_with(fields=role_read_schema, code=HTTPStatus.ACCEPTED)
     def put(self, role_id):
@@ -163,6 +169,7 @@ class RoleResource(Resource):
 
         return RoleResponse.update_response(data=role)
 
+    @auth(RolePermissions.DELETE_ROLE.value)
     @ns_role.response(
         code=HTTPStatus.NO_CONTENT, description=ROLE_DELETE_SUCCESS
     )
