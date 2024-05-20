@@ -16,6 +16,7 @@ from flask_boilerplate.schemas.permission import (
     permission_read_schema,
 )
 from flask_boilerplate.services.permission import PermissionService
+from flask_boilerplate.constants.permissions import PermissionPermissions
 
 
 @ns_permission.route("/")
@@ -28,7 +29,7 @@ class PermissionListResource(Resource):
 
     """
 
-    @auth()
+    @auth(PermissionPermissions.CREATE_PERMISSION.value)
     @ns_permission.expect(permission_create_schema, validate=True)
     @ns_permission.marshal_with(permission_read_schema, skip_none=True)
     def post(self):
@@ -57,7 +58,7 @@ class PermissionListResource(Resource):
 
         return PermissionResponse.create_response(data=permission)
 
-    @auth()
+    @auth(PermissionPermissions.GET_ALL_PERMISSION.value)
     @ns_permission.marshal_with(permission_read_schema, skip_none=True)
     def get(self):
         """

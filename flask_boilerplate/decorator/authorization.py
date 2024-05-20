@@ -3,9 +3,10 @@ from typing import Dict
 import jwt
 from flask import g, request
 from werkzeug.exceptions import Unauthorized
-from ..services.user import UserService
+from flask_boilerplate.services.user import UserService
 from flask_boilerplate.core.config import PUBLIC_KEY
-from services.redis import redis
+from flask_boilerplate.services.redis import redis
+from functools import wraps as functools_wraps
 
 
 def decode_jwt_token(token: str) -> Dict:
@@ -48,7 +49,8 @@ def auth(*value):
         Decorated function
     """
 
-    def wraps(f):
+    def decorator(f):
+        @functools_wraps(f)
         def wrapper_function(*args, **kwargs):
             g.user = None
             g.permission = value
@@ -61,6 +63,7 @@ def auth(*value):
                 token = token[1]
             else:
                 raise Unauthorized("Invalid Token")
+
             decoded = decode_jwt_token(token)
             if decoded and "sub" in decoded.keys():
                 g.user = UserService().read_by_id(decoded["sub"])
@@ -68,20 +71,17 @@ def auth(*value):
                 if permissions:
                     if g.permission[0] in permissions:
                         return f(*args, **kwargs)
-
             else:
-                return Unauthorized("Invalid Token")
+                raise Unauthorized("Invalid Token")
 
             raise Unauthorized("Invalid Token")
 
         return wrapper_function
 
-    # If @auth is used instead of @auth(PERMISSION), value will
-    # contain the child function instead of being empty due to
-    # how decorators work, we handle that
-    if hasattr(value, "__call__"):
-        f = value
-        value = None
-        return wraps(f)
+    # Handle both cases where decorator might be used with or without arguments
+    if value and hasattr(value[0], "__call__"):
+        f = value[0]
+        value = ()
+        return decorator(f)
 
-    return wraps
+    return decorator
