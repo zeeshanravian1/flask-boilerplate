@@ -62,6 +62,7 @@ permission_read_schema: Model | OrderedModel = ns_permission.model(
     name="PermissionReadSchema",
     model={
         "success": Boolean(default=True),
+        "total_rows": Integer(),
         "data": Nested(permission_read_base_schema),
     },
     strict=True,
@@ -80,8 +81,7 @@ permission_read_all_schema: Model | OrderedModel = ns_permission.model(
 
 
 # Permission Update Schema
-permission_update_schema: Model | OrderedModel = ns_permission.inherit(
+permission_update_schema: Model | OrderedModel = ns_permission.model(
     "PermissionUpdateSchema",
-    permission_base_schema,
-    {"permission_name": String(required=True)},
+    {"permission_description": String()},
 )

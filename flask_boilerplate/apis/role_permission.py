@@ -16,7 +16,7 @@ from flask_boilerplate.schemas.role_permission import (
 )
 from flask_boilerplate.services.role_permission import RolePermissionService
 from flask_boilerplate.responses.role_permission import RolePermissionResponse
-from flask_boilerplate.constants.permissions import RolePermissions
+from flask_boilerplate.constants.enum import RolePermissions
 
 
 @ns_role_permission.route("/")
@@ -29,7 +29,7 @@ class RolePermissionPatchResource(Resource):
 
     """
 
-    @auth()
+    @auth(RolePermissions.UPDATE_ROLE.value)
     @ns_role_permission.expect(role_permission_patch_expect, validate=True)
     @ns_role_permission.marshal_with(role_permission_patch_response)
     def post(self):
@@ -83,6 +83,10 @@ class RolePermissionListResource(Resource):
             - `created_at (str)`: Datetime of role creation.
             - `updated_at (str)`: Datetime of role update.
         """
-        role_permissions = RolePermissionService().get_role_permission(role_id)
+        role_permissions, count = RolePermissionService().get_role_permission(
+            role_id
+        )
 
-        return RolePermissionResponse.success(data=role_permissions)
+        return RolePermissionResponse.success(
+            data=role_permissions, total_rows=count
+        )

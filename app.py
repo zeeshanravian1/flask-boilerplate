@@ -35,9 +35,15 @@ from flask_boilerplate.core.config import (
 )
 from flask_boilerplate.core.middlewares import ExceptionHandler
 from flask_boilerplate.database.base import db
+from flask_boilerplate.database.initialize_database import (
+    add_permissions,
+    add_roles,
+    add_admin_permissions,
+)
 
 # Initialize Flask application instance
 app = Flask(__name__)
+app.app_context().push()
 
 # Initialize ExceptionHandler instance
 ExceptionHandler(app)
@@ -113,7 +119,9 @@ api.add_namespace(ns_user)
 api.add_namespace(ns_permission)
 api.add_namespace(ns_role_permission)
 
-
+add_permissions()
+add_roles()
+add_admin_permissions()
 # Main function to run application
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)

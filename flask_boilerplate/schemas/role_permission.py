@@ -48,6 +48,7 @@ role_permission_patch_response = ns_role_permission.model(
     "UserLoginResponse",
     {
         "success": String(),
+        "total_rows": Integer(),
         "data": Nested(role_permission_patch, skip_none=True, allow_null=True),
         "errors": List(String),
     },

@@ -154,7 +154,7 @@ class BaseResponse:
         )
 
     @staticmethod
-    def success(data: List = []):
+    def success(data: List = [], total_rows: int = None):
         """
         Success Response
 
@@ -168,6 +168,8 @@ class BaseResponse:
             - `response (dict)`: Response dict.
         """
         response = {"success": True, "data": data}
+        if total_rows is not None:
+            response["total_rows"] = total_rows
 
         return response
 

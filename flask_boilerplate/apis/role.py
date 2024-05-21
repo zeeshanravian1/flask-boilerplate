@@ -21,8 +21,9 @@ from flask_boilerplate.schemas.role import (
     role_update_schema,
 )
 from flask_boilerplate.services.role import RoleService
-from flask_boilerplate.constants.permissions import RolePermissions
+from flask_boilerplate.constants.enum import RolePermissions
 from flask_boilerplate.decorator.authorization import auth
+from flask_boilerplate.services.redis import redis
 
 
 # Resource to handle listing and adding roles
@@ -187,10 +188,11 @@ class RoleResource(Resource):
             - `None`
 
         """
-
+        role_name = RoleService().read_by_id(role_id).role_name
         role = RoleService().delete(entity_id=role_id)
 
         if not role:
             return RoleResponse.not_found_response(data=ROLE)
 
+        redis.delete(role_name)
         return RoleResponse.delete_response()

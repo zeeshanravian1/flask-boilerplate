@@ -62,3 +62,10 @@ class RolePermissionRepository(BaseRepository):
             return role_permissions.all(), role.first().role_name
 
         return None
+
+    def get_role_permission(self, role_id, permission_id):
+        row = db.session.query(RolePermissionTable).filter(
+            RolePermissionTable.role_id == role_id,
+            RolePermissionTable.permission_id == permission_id,
+        )
+        return row
