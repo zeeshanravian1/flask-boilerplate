@@ -11,6 +11,11 @@ class Enum(str, PyEnum):
         return [x.value for x in cls]
 
 
+class Roles(Enum):
+    ADMIN = "admin"
+    CLIENT = "client"
+
+
 class UserPermissions(Enum):
     GET_ALL_USERS = "Get All Users"
     GET_USER = "Get User"
@@ -20,7 +25,7 @@ class UserPermissions(Enum):
 
 class RolePermissions(Enum):
     Create_Role = "Create Role"
-    GET_ALL_ROLE = "Get All Roles"
+    GET_ALL_ROLE = "Get All Role"
     GET_ROLE = "Get Role"
     UPDATE_ROLE = "Update Role"
     DELETE_ROLE = "Delete Role"
@@ -28,6 +33,7 @@ class RolePermissions(Enum):
 
 class PermissionPermissions(Enum):
     CREATE_PERMISSION = "Create Permission"
-    GET_ALL_PERMISSION = "Get All Permission"
-    GET_PERMISSION = "Get Permisison"
+    GET_ALL_PERMISSION = "Get All Permissions"
+    GET_PERMISSION = "Get Permission"
     UPDATE_PERMISSION = "Update Permission"
+    DELETE_PERMISSION = "Delete Permission"

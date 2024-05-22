@@ -58,4 +58,17 @@ class RolePermissionService(BaseService):
         """
         list, _ = self.repository.get_role_permissions(role_id)
 
-        return list
+        return list, len(list)
+
+    def get_role_n_permission(self, role_id, permission_id):
+        """
+        Get the role and permission
+
+        Args:
+            - `role_id (int)`: Role id **(Required)**
+            -  `permission_id (int)`: Permission id **(Required)**
+
+        """
+        row = self.repository.get_role_permission(role_id, permission_id)
+
+        return row

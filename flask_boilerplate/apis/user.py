@@ -31,7 +31,7 @@ from flask_boilerplate.schemas.user import (
     user_update_schema,
 )
 from flask_boilerplate.services.user import UserService
-from flask_boilerplate.constants.permissions import UserPermissions
+from flask_boilerplate.constants.enum import UserPermissions
 
 
 @ns_user.route("/")
